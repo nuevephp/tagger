@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tagger Plugin for Frog CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger>
+ * Tagger Plugin for Frog CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
  * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>
  * Copyright (C) 2008 Andrew Smith <a.smith@silentworks.co.uk>
  * Copyright (C) 2008 Tyler Beckett <tyler@tbeckett.net>
@@ -48,15 +48,19 @@ class Tagger
     public function pagesByTag($params = false)
 	{
 		global $__FROG_CONN__;
+		
+		// Count rows in table
+		$query_count = "SELECT count(*) FROM ".TABLE_PREFIX."page;";
+		$qc1 = $__FROG_CONN__->query($query_count);
 
-		$query = "SELECT parent_id,id, slug FROM ".TABLE_PREFIX."page AS page ORDER BY page.position ASC;";
-
-		$pdo = $__FROG_CONN__->prepare($query);
-		$pdo->execute();
-
-		if($pdo->rowCount() > 0)
+		if($qc1->fetchColumn() > 0)
 		{
-			while($article = $pdo->fetchObject())
+			// Execute real query
+			$query1 = "SELECT parent_id, id, slug FROM ".TABLE_PREFIX."page AS page ORDER BY page.position ASC;";
+			$pdo1 = $__FROG_CONN__->prepare($query1);
+			$pdo1->execute();
+			
+			while($article = $pdo1->fetchObject())
 			{
 				$archive[] = array(
 					'slug' => $article->slug,
@@ -72,10 +76,10 @@ class Tagger
 			$pid = $parent['pid'];
 			while ($pid != 0)
 			{
-				$query = "SELECT parent_id, slug FROM ".TABLE_PREFIX."page AS page WHERE page.id = '$pid' ORDER BY page.position ASC;";
-				$pdo = $__FROG_CONN__->prepare($query);
-				$pdo->execute();
-				$query = $pdo->fetchObject();
+				$query2 = "SELECT parent_id, slug FROM ".TABLE_PREFIX."page AS page WHERE page.id = '$pid' ORDER BY page.position ASC;";
+				$pdo2 = $__FROG_CONN__->prepare($query2);
+				$pdo2->execute();
+				$query = $pdo2->fetchObject();
 				$pid = $query->parent_id;
 				$url[$parent['id']] = $query->slug.'/'.$url[$parent['id']];
 			}
@@ -89,14 +93,18 @@ class Tagger
 
 		$tag_unslugified = unslugify($params[0]);
 		$tag = $params[0];
+		
+		// Count rows in table
+		$sql_count = "SELECT count(*) FROM ".TABLE_PREFIX."page AS page, ".TABLE_PREFIX."page_tag AS page_tag, ".TABLE_PREFIX."tag AS tag WHERE page.id = page_tag.page_id AND page_tag.tag_id = tag.id AND ((tag.name = '$tag') OR (tag.name = '$tag_unslugified')) AND page.status_id != ".Page::STATUS_HIDDEN." AND page.status_id != ".Page::STATUS_DRAFT." ORDER BY page.created_on DESC";
+		$qc2 = $__FROG_CONN__->query($sql_count);
 
-		$sql = "SELECT slug, title, parent_id FROM ".TABLE_PREFIX."page AS page, ".TABLE_PREFIX."page_tag AS page_tag, ".TABLE_PREFIX."tag AS tag WHERE page.id = page_tag.page_id AND page_tag.tag_id = tag.id AND ((tag.name = '$tag') OR (tag.name = '$tag_unslugified')) AND page.status_id != ".Page::STATUS_HIDDEN." AND page.status_id != ".Page::STATUS_DRAFT." ORDER BY page.created_on DESC";
-
-		$stmt = $__FROG_CONN__->prepare($sql);
-		$stmt->execute();
-
-		if($stmt->rowCount() > 0){
-			while ($content = $stmt->fetchObject())
+		if($qc2->fetchColumn() > 0){
+			
+			$query3 = "SELECT slug, title, parent_id FROM ".TABLE_PREFIX."page AS page, ".TABLE_PREFIX."page_tag AS page_tag, ".TABLE_PREFIX."tag AS tag WHERE page.id = page_tag.page_id AND page_tag.tag_id = tag.id AND ((tag.name = '$tag') OR (tag.name = '$tag_unslugified')) AND page.status_id != ".Page::STATUS_HIDDEN." AND page.status_id != ".Page::STATUS_DRAFT." ORDER BY page.created_on DESC";
+			$pdo3 = $__FROG_CONN__->prepare($query3);
+			$pdo3->execute();
+			
+			while ($content = $pdo3->fetchObject())
 			{
 				if(isset($url[$content->parent_id]))
 				{
