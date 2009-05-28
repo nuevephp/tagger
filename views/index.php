@@ -15,7 +15,7 @@
     <ul class="tagged">
       <?php echo __('tagged:'); ?>
       <?php foreach(TaggerTag::findTagsAndPageAssigned($tag->id) as $page_id => $title): $n++ ?>
-      <li id="<?php echo $page_id; ?>"><a href="<?php echo get_url('page/edit/'.$url); ?>"><?php echo $title; ?></a><a href="<?php echo get_url('plugin/tagger/endrelationship/' . $page_id . '-' . $tag->id); ?>" style="padding: 0 2px;">[&times;]</a><?php if($tagCount != 1 && $n != $tagCount) echo '&sbquo; '; ?></li>
+      <li id="<?php echo $page_id; ?>"><a href="<?php echo get_url('page/edit/'.$page_id); ?>"><?php echo $title; ?></a><a href="<?php echo get_url('plugin/tagger/endrelationship/' . $page_id . '-' . $tag->id); ?>" style="padding: 0 2px;">[&times;]</a><?php if($tagCount != 1 && $n != $tagCount) echo '&sbquo; '; ?></li>
       <?php endforeach; ?>
     </ul>
     <?php endif; ?>

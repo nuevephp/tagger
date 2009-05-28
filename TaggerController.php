@@ -65,7 +65,6 @@ class TaggerController extends PluginController
 			$CurPage = 0;
 		}
 		$rowspage = Plugin::getSetting('rowspage', 'tagger');
-		//$rowspage = 15;
 
 		$start = $CurPage * $rowspage;
 
