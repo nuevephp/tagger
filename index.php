@@ -123,7 +123,7 @@ function tagger($option = false, $case = false, $limit = false)
 				// loop through the tag array
 				foreach ($tags as $key => $value) {
 					$key_case = $tag_case == 1 ? ucfirst($key) : strtolower($key);
-					echo '<li><a href="'. $tagger . slugify($key) . URL_SUFFIX .'" title="' . $value . ' things tagged with ' . $key . '">' . $key_case . '</a></li>';
+					echo '<li><a href="'. $tagger . slugify($key) . URL_SUFFIX .'" title="' . $value . ' things tagged with ' . $key . '">' . htmlspecialchars_decode($key_case) . '</a></li>';
 				}
 				echo '</ul>';
 			break;
@@ -165,7 +165,9 @@ function tag_links($tags, $delimiter = ', ')
  * @param string $string
  */
 function slugify($string){
-	$slug = strtolower($string); // lower-case the string
-	$slug = preg_replace('/[^a-z0-9- ]/', '', $slug); // remove all non-alphanumeric characters except for spaces and hyphens
-	return str_replace(' ', '-', $slug);// substitute the spaces with hyphens
+	$search = array(' ','á','à','â','ã','ª','Á','À','Â','Ã','é','è','ê','É','È','Ê','í','ì','î','Í','Ì','Î','ò','ó','ô', 'õ','º','Ó','Ò','Ô','Õ','ú','ù','û','Ú','Ù','Û','ç','Ç','Ñ','ñ'); 
+    $replace = array('-','a','a','a','a','a','A','A','A','A','e','e','e','E','E','E','i','i','i','I','I','I','o','o','o','o','o','O','O','O','O','u','u','u','U','U','U','c','C','N','n'); 
+    $slug = trim(str_replace($search, $replace, $string)); // substitute the spaces with hyphens
+    $slug = strtolower($slug); // lower-case the string
+	return ereg_replace('[^A-Za-z0-9\_\.\-]', '', $slug); // remove all non-alphanumeric characters except for spaces and hyphens
 }
