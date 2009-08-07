@@ -26,6 +26,8 @@ The tags idea was brought to light back in February of 2008, before the function
 
 In mid-October, 2008, the plugin was brought back into the spotlight and needed updates to bring it up to speed with the quickly developing Frog.  mtylerb and easylancer began working together and fixed issues that had surfaced in the few months it had been around.  In mid-November, 2008, the plugin was finally ready for re-release!
 
+After the fork of Wolf CMS from Frog in July 2009, this plugin was first ported to the new system in August 2009.
+
 Credits (in alphabetical order):
 
 BDesign
@@ -38,7 +40,7 @@ phillipe
 
 Installation:
 
-1) Place this plugin in the Frog plugins directory.
+1) Place this plugin (as a directory with all contents) in the Wolf /wolf/plugins directory.
 2) Activate the plugin through the administration screen.
 3) The plugin should automatically be ready to use, go to step 4 only if you can't find the Tags page or tag snippet.
 
