@@ -1,6 +1,8 @@
 /**
- * Tagger Plugin for Frog CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
- * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>
+ * Tagger Plugin for Wolf CMS 
+ * 
+ * [direct port of Frog Tagger for Wolf CMS <http://www.wolfcms.org/>]
+ *
  * Copyright (C) 2008 Andrew Smith <a.smith@silentworks.co.uk>
  * Copyright (C) 2008 Tyler Beckett <tyler@tbeckett.net>
 
