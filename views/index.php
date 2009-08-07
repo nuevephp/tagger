@@ -7,7 +7,7 @@
 <ul id="snippets" class="index">
 <?php foreach($tags as $tag): ?>
   <li id="snippet_<?php echo $tag->id; ?>" class="snippet node <?php echo odd_even(); ?>">
-    <img align="middle" alt="snippet-icon" src="../frog/plugins/tagger/images/tag.png" />
+    <img align="middle" alt="snippet-icon" src="../wolf/plugins/tagger/images/tag.png" />
     <a href="<?php echo get_url('plugin/tagger/edit/'.$tag->id); ?>"><?php echo $tag->name; ?>  (<?php echo $tag->count; ?>)</a>
     <?php
     $tagCount = count(TaggerTag::findTagsAndPageAssigned($tag->id));
