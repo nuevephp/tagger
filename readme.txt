@@ -40,7 +40,7 @@ phillipe
 
 Installation:
 
-1) Place this plugin (as a directory with all contents) in the Wolf /wolf/plugins directory.
+1) Place this plugin (as a directory named 'tagger' with all contents) in the Wolf /wolf/plugins directory.
 2) Activate the plugin through the administration screen.
 3) The plugin should automatically be ready to use, go to step 4 only if you can't find the Tags page or tag snippet.
 
