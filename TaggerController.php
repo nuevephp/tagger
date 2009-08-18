@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tagger Plugin for Frog CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
  * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>
@@ -38,15 +37,6 @@
 include_once 'models/Tagger.php';
 include_once 'models/TaggerTag.php';
 
-/**
- * class TaggerController
- *
- * @package frog
- * @subpackage plugin.tagger
- * @author Andrew Smith <a.smith@silentworks.co.uk>
- * @author Tyler Beckett <tyler@tbeckett.net>
- * @since Frog version 0.9.3
- */
 class TaggerController extends PluginController
 {
     public function __construct()
@@ -58,12 +48,9 @@ class TaggerController extends PluginController
     public function index($page = 0)
     {
 		$totalTags = Tagger::findAll();
-
-		if (isset($page)) {
-			$CurPage = $page;
-		} else {
-			$CurPage = 0;
-		}
+		
+		$CurPage = isset($page) ? $page : 0;
+		
 		$rowspage = Plugin::getSetting('rowspage', 'tagger');
 
 		$start = $CurPage * $rowspage;
@@ -71,7 +58,8 @@ class TaggerController extends PluginController
 		$totalrecords = count($totalTags);
 
 		$lastpage = ceil($totalrecords / $rowspage);
-		if($totalrecords <= $rowspage) { $lastpage = 0; } else { $lastpage = abs($lastpage - 1); }
+		
+		$lastpage = $totalrecords <= $rowspage ? 0 : abs($lastpage - 1);
 
 		/* Get data. */
 		$tags = Tagger::findAll(array('offset' =>  $start,'limit' => $rowspage));
@@ -86,14 +74,12 @@ class TaggerController extends PluginController
     public function add()
     {
         // check if trying to save
-        if (get_request_method() == 'POST')
-            return $this->_add();
+        if (get_request_method() == 'POST') return $this->_add();
 
         // check if user have already enter something
         $tag = Flash::get('post_data');
 
-        if (empty($tag))
-            $tag = new Tagger;
+        if (empty($tag)) $tag = new Tagger;
 
         $this->display('tagger/views/edit', array(
             'action'  => 'add',
@@ -116,10 +102,8 @@ class TaggerController extends PluginController
         else Flash::set('success', __('Tag has been added!'));
 
         // save and quit or save and continue editing?
-        if (isset($_POST['commit']))
-            redirect(get_url('plugin/tagger'));
-        else
-            redirect(get_url('plugin/tagger/edit/'.$tag->id));
+        if (isset($_POST['commit'])) redirect(get_url('plugin/tagger'));
+        else redirect(get_url('plugin/tagger/edit/'.$tag->id));
     }
 
     function edit($id)
@@ -131,8 +115,7 @@ class TaggerController extends PluginController
         }
 
         // check if trying to save
-        if (get_request_method() == 'POST')
-            return $this->_edit($id);
+        if (get_request_method() == 'POST') return $this->_edit($id);
 
         $this->display('tagger/views/edit', array(
             'action'  => 'edit',
@@ -156,23 +139,18 @@ class TaggerController extends PluginController
         else Flash::set('success', __('Tag :name has been saved!', array(':name'=>$tag->name)));
 
         // save and quit or save and continue editing?
-        if (isset($_POST['commit']))
-            redirect(get_url('plugin/tagger'));
-        else
-            redirect(get_url('plugin/tagger/edit/'.$id));
+        if (isset($_POST['commit'])) redirect(get_url('plugin/tagger'));
+        else redirect(get_url('plugin/tagger/edit/'.$id));
     }
 
-    function delete($id)
-    {
+    function delete($id) {
         // find the user to delete
         if ($tag = Record::findByIdFrom('Tag', $id))
         {
             if ($tag->delete()){
-                if(TaggerTag::deleteByTagId($id))
-                    Flash::set('success', __('Tag :name has been deleted!', array(':name'=>$tag->name)));
+                if(TaggerTag::deleteByTagId($id)) Flash::set('success', __('Tag :name has been deleted!', array(':name'=>$tag->name)));
             }
-            else
-                Flash::set('error', __('Tag :name has not been deleted!', array(':name'=>$tag->name)));
+            else Flash::set('error', __('Tag :name has not been deleted!', array(':name'=>$tag->name)));
         }
         else Flash::set('error', __('Tag not found!'));
 
@@ -191,10 +169,8 @@ class TaggerController extends PluginController
 
         $ret = Plugin::setAllSettings($settings, 'tagger');
 
-        if ($ret)
-            Flash::set('success', __('The settings have been updated.'));
-        else
-            Flash::set('error', 'An error has occured.');
+        if ($ret) Flash::set('success', __('The settings have been updated.'));
+        else Flash::set('error', 'An error has occured.');
 
         redirect(get_url('plugin/tagger/settings'));
 	}
@@ -206,8 +182,7 @@ class TaggerController extends PluginController
 	 *
 	 * @param string $ids
 	 */
-    function endrelationship($ids)
-    {
+    function endrelationship($ids) {
     	$id = explode('-', $ids);
 
     	$page_id = $id[0];
@@ -247,8 +222,7 @@ class TaggerController extends PluginController
 	 *
 	 * @since 1.0.0
 	 */
-	public function documentation()
-    {
+	public function documentation() {
         $this->display('tagger/views/documentation');
     }
 } // end TaggerController class

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tagger Plugin for Frog CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
  * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>

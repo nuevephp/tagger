@@ -32,8 +32,7 @@ class Tagger extends Tag
     public $name;
     public $count;
     
-    public static function find($args = null)
-    {
+    public static function find($args = null) {
         
         // Collect attributes...
         $where    = isset($args['where']) ? trim($args['where']) : '';
@@ -49,22 +48,17 @@ class Tagger extends Tag
         $tablename = self::tableNameFromClassName('Tag');
 
         // Prepare SQL
-        $sql = "SELECT * FROM $tablename".
-               " $where_string $order_by_string $limit_string";
+        $sql = "SELECT * FROM $tablename"." $where_string $order_by_string $limit_string";
 
         $stmt = self::$__CONN__->prepare($sql);
         $stmt->execute();
 
         // Run!
-        if ($limit == 1)
-        {
+        if ($limit == 1) {
             return $stmt->fetchObject('Tag');
-        }
-        else
-        {
+        } else {
             $objects = array();
-            while ($object = $stmt->fetchObject('Tag'))
-            {
+            while ($object = $stmt->fetchObject('Tag')) {
                 $objects[] = $object;
             }
             return $objects;
@@ -72,13 +66,11 @@ class Tagger extends Tag
     
     } // find
     
-    public static function findAll($args = null)
-    {
+    public static function findAll($args = null) {
         return self::find($args);
     }
     
-    public static function findById($id)
-    {
+    public static function findById($id) {
         return self::find(array(
             'where' => self::tableNameFromClassName('Tag').'.id='.(int)$id,
             'limit' => 1

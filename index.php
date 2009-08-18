@@ -99,10 +99,7 @@ function tagger($option = false, $case = false, $limit = false)
 				echo '<ul class="tagger">';
 				// loop through the tag array
 				foreach ($tags as $key => $value) {
-					// calculate font-size
-					// find the $value in excess of $min_qty
-					// multiply by the font-size increment ($size)
-					// and add the $min_size set above
+					// calculate font-size, find the $value in excess of $min_qty, multiply by the font-size increment ($size), and add the $min_size set above
 					$size = round($min_size + (($value - $min_qty) * $step));
 					$key_case = $tag_case == "1" ? ucfirst($key) : strtolower($key);
 					echo '<li style="display: inline; border: none;"><a href="'. $tagger . slugify($key) . URL_SUFFIX .'" style="display: inline; border: none; font-size: ' . $size . 'px; padding: 2px" title="' . $value . ' things tagged with ' . $key . '">' . $key_case . "</a></li>\n";
@@ -147,7 +144,7 @@ function tag_links($tags, $delimiter = ', ')
     $stmt = $__FROG_CONN__->prepare($sql);
     $stmt->execute();
 
-    if (!is_null($slug = $stmt->fetchColumn())) { $tagger = BASE_URL.$slug.'/'; }
+    if (!is_null($slug = $stmt->fetchColumn())) $tagger = BASE_URL.$slug.'/';
 
 	$i = 1;
 	foreach($tags as $tag){
