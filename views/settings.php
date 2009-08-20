@@ -24,7 +24,7 @@
 
 <form action="<?php echo get_url('plugin/tagger/save'); ?>" method="post">
     <fieldset style="padding: 0.5em;">
-        <legend style="padding: 0em 0.5em 0em 0.5em; font-weight: bold;"><?php echo __('Tagger settings'); ?></legend>
+        <legend style="padding: 0em 0.5em 0em 0.5em; font-weight: bold;"><?php echo __('Tagger Frontend settings'); ?></legend>
         <table class="fieldset" cellpadding="0" cellspacing="0" border="0">
             <tr>
                 <td class="label"><label for="case"><?php echo __('Type Case'); ?>: </label></td>
@@ -47,14 +47,40 @@
 				</td>
                 <td class="help"><?php echo __("Select how you would like the tags to be displayed, you can also overide this within the tag snippet."); ?></td>
             </tr>
-            <tr>
+        </table>
+    </fieldset>
+    <fieldset style="padding: 0.5em;">
+        <legend style="padding: 0em 0.5em 0em 0.5em; font-weight: bold;"><?php echo __('Tagger Backend settings'); ?></legend>
+        <table class="fieldset" cellpadding="0" cellspacing="0" border="0">
+        	<tr>
                 <td class="label"><label for="rowspage"><?php echo __('Tags per page'); ?>: </label></td>
                 <td class="field">
 					<input type="text" class="textinput" value="<?php echo $rowspage; ?>" name="rowspage" />
 				</td>
                 <td class="help"><?php echo __('Sets the number of tags to be displayed per page in the backend.'); ?></td>
         	</tr>
-        </table>
+	        <tr>
+	            <td class="label"><label for="sort_field"><?php echo __('Sort Field'); ?>: </label></td>
+	            <td class="field">
+					<select name="sort_field" id="sort_field">
+						<?php foreach (Tagger::sortField() as $key => $field): ?>
+							<option value="<?php echo $key; ?>" <?php if($sort_field == $key) echo 'selected ="";' ?>><?php echo $field; ?></option>
+						<?php endforeach ?>
+					</select>
+				</td>
+	            <td class="help"><?php echo __('Choose the field your would like your tags to be sorted by in the backend.'); ?></td>
+	        </tr>
+			<tr>
+	            <td class="label"><label for="sort_order"><?php echo __('Sort Order'); ?>: </label></td>
+	            <td class="field">
+					<select name="sort_order" id="sort_order">
+						<option value="ASC" <?php if($sort_order == "ASC") echo 'selected ="";' ?>><?php echo __('ASC'); ?></option>
+						<option value="DESC" <?php if($sort_order == "DESC") echo 'selected ="";' ?>><?php echo __('DESC'); ?></option>
+					</select>
+				</td>
+	            <td class="help"><?php echo __("Choose the order your would like your tags to be sorted by in the backend."); ?></td>
+	        </tr>
+	    </table>
     </fieldset>
     <br/>
     <p class="buttons">

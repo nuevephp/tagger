@@ -52,6 +52,11 @@ class TaggerController extends PluginController
 		$CurPage = isset($page) ? $page : 0;
 		
 		$rowspage = Plugin::getSetting('rowspage', 'tagger');
+		
+		// New functions added in to make sorting tags easier on the backend.
+		$sort_field = Plugin::getSetting('sort_field', 'tagger');
+		$sort_order = Plugin::getSetting('sort_order', 'tagger');
+		$order_by = Tagger::sortField($sort_field). ' ' .$sort_order;
 
 		$start = $CurPage * $rowspage;
 
@@ -62,7 +67,7 @@ class TaggerController extends PluginController
 		$lastpage = $totalrecords <= $rowspage ? 0 : abs($lastpage - 1);
 
 		/* Get data. */
-		$tags = Tagger::findAll(array('offset' =>  $start,'limit' => $rowspage));
+		$tags = Tagger::findAll(array('offset' =>  $start,'limit' => $rowspage, 'order' => $order_by));
 
         $this->display('tagger/views/index', array(
             'tags' => $tags,
@@ -161,10 +166,14 @@ class TaggerController extends PluginController
 		$tag_type = mysql_escape_string($_POST['tag_type']);
         $case = mysql_escape_string($_POST['case']);
         $rowspage = mysql_escape_string($_POST['rowspage']);
+        $sort_field = mysql_escape_string($_POST['sort_field']);
+        $sort_order = mysql_escape_string($_POST['sort_order']);
 
         $settings = array('tag_type' => $tag_type,
                           'case' => $case,
-                          'rowspage' => $rowspage
+                          'rowspage' => $rowspage,
+                          'sort_field' => $sort_field,
+                          'sort_order' => $sort_order
                          );
 
         $ret = Plugin::setAllSettings($settings, 'tagger');
@@ -212,7 +221,9 @@ class TaggerController extends PluginController
         $tmp = Plugin::getAllSettings('tagger');
         $settings = array('tag_type' => $tmp['tag_type'],
                           'case' => $tmp['case'],
-                          'rowspage' => $tmp['rowspage']
+                          'rowspage' => $tmp['rowspage'],
+                          'sort_field' => $tmp['sort_field'],
+                          'sort_order' => $tmp['sort_order']
                          );
         $this->display('tagger/views/settings', $settings);
     }

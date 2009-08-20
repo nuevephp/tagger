@@ -76,4 +76,16 @@ class Tagger extends Tag
             'limit' => 1
         ));
     }
+    
+    /**
+	 * Gives the name of the tag fields
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param int $value
+	 */
+    public function sortField($value) {
+    	$fields = array('id', 'name', 'count');
+    	return isset($value) ? $fields[$value] : $fields;
+    }
 }

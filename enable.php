@@ -38,7 +38,9 @@ $PDO->exec("INSERT INTO ".TABLE_PREFIX."snippet (name, filter_id, content, conte
 // Store settings new style
 $settings = array('tag_type' => 'count',
                   'case' => '0',
-                  'rowspage' => '15'
+                  'rowspage' => '15',
+                  'sort_field' => '0',
+                  'sort_order' => 'ASC'
                  );
 
 Plugin::setAllSettings($settings, 'tagger');
