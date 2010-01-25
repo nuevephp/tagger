@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Tagger Plugin for Frog CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
- * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>
+ * Tagger Plugin for Wolf CMS
+ *
  * Copyright (C) 2008 Andrew Smith <a.smith@silentworks.co.uk>
  * Copyright (C) 2008 Tyler Beckett <tyler@tbeckett.net>
 
@@ -24,13 +24,18 @@ Plugin::setInfos(array(
     'id'          => 'tagger',
     'title'       => 'Tagger',
     'description' => 'Add tags to any page and organize your website.',
-    'version'     => '1.1.0',
+    'version'     => '1.2.0',
     'license'     => 'AGPL',
     'author'      => 'Andrew Smith and Tyler Beckett',
     'website'     => 'http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html',
 	'update_url'  => 'http://thehub.silentworks.co.uk/plugin-version.xml',
-    'require_frog_version' => '0.9.5')
+    'require_wolf_version' => '0.5.5')
 );
+
+/**
+ * Root location where Tagger plugin lives.
+ */
+define('TAGGER_ROOT', URI_PUBLIC.'wolf/plugins/tagger');
 
 Plugin::addController('tagger', 'Tagger');
 Behavior::add('tagger', 'tagger/tagger.php');
@@ -40,6 +45,19 @@ function cmpVals($val1, $val2)
 	return strcasecmp($val1, $val2);
 }
 
+function tag_url()
+{
+	global $__CMS_CONN__;
+
+    $sql = 'SELECT DISTINCT(slug) FROM '.TABLE_PREFIX.'page WHERE behavior_id = "tagger"';
+
+    $stmt = $__CMS_CONN__->prepare($sql);
+    $stmt->execute();
+
+    if (!is_null($slug = $stmt->fetchColumn()))
+		return BASE_URL . $slug . '/';
+}
+
 /**
  * Display tags on a page
  *
@@ -47,20 +65,23 @@ function cmpVals($val1, $val2)
  *
  * @param string booleon booleon
  */
-function tagger($option = false, $case = false, $limit = false)
+function tagger($option = false)
 {
-    global $__FROG_CONN__;
-
-    $sql = 'SELECT DISTINCT(slug) FROM '.TABLE_PREFIX.'page WHERE behavior_id = "tagger"';
-
-    $stmt = $__FROG_CONN__->prepare($sql);
-    $stmt->execute();
-
-    if (!is_null($slug = $stmt->fetchColumn())) { $tagger = BASE_URL.$slug.'/'; }
+    global $__CMS_CONN__;
+	
 	// Setting Limit if selected
-	if($limit){ $limit_set = " LIMIT 0, {$limit}"; } else { $limit_set = ""; }
-    $sql = 'SELECT name, count FROM '.TABLE_PREFIX.'tag AS tag, '.TABLE_PREFIX.'page AS page, '.TABLE_PREFIX.'page_tag AS page_tag WHERE tag.id = page_tag.tag_id AND page_tag.page_id = page.id AND page.status_id != '.Page::STATUS_HIDDEN.' AND page.status_id != '.Page::STATUS_DRAFT . $limit_set;
-    $stmt = $__FROG_CONN__->prepare($sql);
+	if(array_key_exists('limit', $option))
+		$limit_set = " LIMIT 0, {$option['limit']}";
+	else
+		$limit_set = "";
+		
+	if(array_key_exists('parent', $option))
+		$parent = " AND page.parent_id = {$option['parent']}";
+	else
+		$parent = "";
+	
+    $sql = 'SELECT name, count FROM '.TABLE_PREFIX.'tag AS tag, '.TABLE_PREFIX.'page AS page, '.TABLE_PREFIX.'page_tag AS page_tag WHERE tag.id = page_tag.tag_id AND page_tag.page_id = page.id AND page.status_id != '.Page::STATUS_HIDDEN.' AND page.status_id != '.Page::STATUS_DRAFT . $parent . $limit_set;
+    $stmt = $__CMS_CONN__->prepare($sql);
     $stmt->execute();
 
     // Putting Tags into a array
@@ -76,8 +97,8 @@ function tagger($option = false, $case = false, $limit = false)
 		$tag_setting_case = Plugin::getSetting('case', 'tagger');
 
 		// Tag display
-		$tag_type = $option ? $option : $tag_setting_type;
-		$tag_case = $case ? $case : $tag_setting_case;
+		$tag_type = array_key_exists('type', $option) ? $option['type'] : $tag_setting_type;
+		$tag_case = array_key_exists('case', $option) ? $option['case'] : $tag_setting_case;
 
 		switch($tag_type){
 			case "cloud":
@@ -99,10 +120,13 @@ function tagger($option = false, $case = false, $limit = false)
 				echo '<ul class="tagger">';
 				// loop through the tag array
 				foreach ($tags as $key => $value) {
-					// calculate font-size, find the $value in excess of $min_qty, multiply by the font-size increment ($size), and add the $min_size set above
+					// calculate font-size
+					// find the $value in excess of $min_qty
+					// multiply by the font-size increment ($size)
+					// and add the $min_size set above
 					$size = round($min_size + (($value - $min_qty) * $step));
 					$key_case = $tag_case == "1" ? ucfirst($key) : strtolower($key);
-					echo '<li style="display: inline; border: none;"><a href="'. $tagger . slugify($key) . URL_SUFFIX .'" style="display: inline; border: none; font-size: ' . $size . 'px; padding: 2px" title="' . $value . ' things tagged with ' . $key . '">' . $key_case . "</a></li>\n";
+					echo '<li style="display: inline; border: none;"><a href="'. tag_url() . slugify($key) . URL_SUFFIX .'" style="display: inline; border: none; font-size: ' . $size . 'px; padding: 2px" title="' . $value . ' things tagged with ' . $key . '">' . $key_case . "</a></li>\n";
 				}
 				echo '</ul>';
 			break;
@@ -111,7 +135,7 @@ function tagger($option = false, $case = false, $limit = false)
 				// loop through the tag array
 				foreach ($tags as $key => $value) {
 					$key_case = $tag_case == "1" ? ucfirst($key) : strtolower($key);
-					echo '<li><a href="'. $tagger . slugify($key) . URL_SUFFIX .'" title="' . $value . ' things tagged with ' . $key . '">' . $key_case . ' ('. $value .')</a></li>';
+					echo '<li><a href="'. tag_url() . slugify($key) . URL_SUFFIX .'" title="' . $value . ' things tagged with ' . $key . '">' . $key_case . ' ('. $value .')</a></li>';
 				}
 				echo '</ul>';
 			break;
@@ -120,7 +144,7 @@ function tagger($option = false, $case = false, $limit = false)
 				// loop through the tag array
 				foreach ($tags as $key => $value) {
 					$key_case = $tag_case == 1 ? ucfirst($key) : strtolower($key);
-					echo '<li><a href="'. $tagger . slugify($key) . URL_SUFFIX .'" title="' . $value . ' things tagged with ' . $key . '">' . htmlspecialchars_decode($key_case) . '</a></li>';
+					echo '<li><a href="'. tag_url() . slugify($key) . URL_SUFFIX .'" title="' . $value . ' things tagged with ' . $key . '">' . htmlspecialchars_decode($key_case) . '</a></li>';
 				}
 				echo '</ul>';
 			break;
@@ -137,18 +161,9 @@ function tagger($option = false, $case = false, $limit = false)
  */
 function tag_links($tags, $delimiter = ', ')
 {
-	global $__FROG_CONN__;
-
-    $sql = 'SELECT DISTINCT(slug) FROM '.TABLE_PREFIX.'page WHERE behavior_id = "tagger"';
-
-    $stmt = $__FROG_CONN__->prepare($sql);
-    $stmt->execute();
-
-    if (!is_null($slug = $stmt->fetchColumn())) $tagger = BASE_URL.$slug.'/';
-
 	$i = 1;
 	foreach($tags as $tag){
-		echo '<a href="'. $tagger . $tag . URL_SUFFIX .'">' . $tag . '</a>';
+		echo '<a href="'. tag_url() . $tag . URL_SUFFIX .'">' . $tag . '</a>';
 		echo $i == count($tags) ? '.' : $delimiter;
 		$i++;
 	}

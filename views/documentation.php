@@ -19,9 +19,11 @@
 		</li>
 		<li><?php echo __('<strong>Limit:</strong> By default it is unlimited (blank).<ul style="text-indent: 15px;"><li>You can enter
 		a number here (without quotes) to limit the number of tags that will be displayed.</li></ul>'); ?></li>
+		<li><?php echo __('<strong>Parent:</strong> By default it is none (blank). <em class="new">New 1.2.0</em><ul style="text-indent: 15px;"><li>You can enter
+		a number (without quotes) of the parent page, this will then display all the tags in the children pages only.</li></ul>'); ?></li>
 	</ul>
 </p>
-<p class="code"><code>&lt;?php tagger('count', true, 5); ?&gt;</code></p>
+<p class="code"><code>&lt;?php tagger(array('type' => 'count', 'case' => true, 'limit' => 5, 'parent' => 4)); ?&gt;</code></p>
 <h2 class="subtitle"><?php echo __('Tag Links'); ?></h2>
 <p><?php echo __('If you would like to have the default tags, that appear in the archives just before clicking a page link, show up as links, please edit your archive and change the line that says:'); ?></p>
 <p class="code bottom-5"><code>&lt;?php echo join(', ', $article->tags()); ?&gt;</code></p>

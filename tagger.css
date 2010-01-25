@@ -22,6 +22,7 @@ ul.tagged 	{ font-size: 0.7em; text-indent: 40px; }
 ul.tagged li	{ display: inline; padding: 2px 1px; border: none; }
 #snippets .tagged a	{ top: 0; }
 h2.subtitle { font-size: 1.0em; background-color: #eee; padding: 5px 0; text-indent: 5px; }
+em.new { color: #f00; }
 .code { background-color: #ffffcc; padding: 5px; }
 .bottom-5 { margin-bottom: 5px; }
 .bottom-10 { margin-bottom: 10px; }
