@@ -3,7 +3,7 @@
 /**
  * Tagger Plugin for Wolf CMS
  *
- * Copyright (C) 2008 Andrew Smith <a.smith@silentworks.co.uk>
+ * Copyright (C) 2008 - 2010 Andrew Smith <a.smith@silentworks.co.uk>
  * Copyright (C) 2008 Tyler Beckett <tyler@tbeckett.net>
 
  * This program is free software: you can redistribute it and/or modify
@@ -123,7 +123,6 @@ class Tagger
  * Unslugify the tag to make it human readable.
  *
  * @since 1.0.1
- *
  * @param string $string
  */
 function unslugify($string){

@@ -1,23 +1,13 @@
 <?php
 
 /**
- * Tagger Plugin for Wolf CMS
- *
- * Copyright (C) 2008 Andrew Smith <a.smith@silentworks.co.uk>
+ * Tagger Plugin for Frog CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
+ * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>
+ * Copyright (C) 2008 - 2010 Andrew Smith <a.smith@silentworks.co.uk>
  * Copyright (C) 2008 Tyler Beckett <tyler@tbeckett.net>
-
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
-
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Dual licensed under the MIT (mit-license.txt)
+ * and GPL (gpl-license.txt) licenses.
  */
 
 Plugin::setInfos(array(
@@ -25,7 +15,7 @@ Plugin::setInfos(array(
     'title'       => 'Tagger',
     'description' => 'Add tags to any page and organize your website.',
     'version'     => '1.2.0',
-    'license'     => 'AGPL',
+    'license'     => 'MIT',
     'author'      => 'Andrew Smith and Tyler Beckett',
     'website'     => 'http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html',
 	'update_url'  => 'http://thehub.silentworks.co.uk/plugin-version.xml',
@@ -45,6 +35,11 @@ function cmpVals($val1, $val2)
 	return strcasecmp($val1, $val2);
 }
 
+/**
+ * Gets the url where pages are displayed based on tag selected
+ *
+ * @since 1.2.0
+*/
 function tag_url()
 {
 	global $__CMS_CONN__;
@@ -62,10 +57,9 @@ function tag_url()
  * Display tags on a page
  *
  * @since 0.0.8
- *
  * @param string booleon booleon
  */
-function tagger($option = false)
+function tagger($option = NULL)
 {
     global $__CMS_CONN__;
 	
@@ -156,7 +150,6 @@ function tagger($option = false)
  * Display tags as links.
  *
  * @since 1.1.0
- *
  * @param object $tags
  */
 function tag_links($tags, $delimiter = ', ')
@@ -173,7 +166,6 @@ function tag_links($tags, $delimiter = ', ')
  * Internal Function to remove whitespace
  *
  * @since 1.0.1
- *
  * @param string $string
  */
 function slugify($string){
