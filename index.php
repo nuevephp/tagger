@@ -173,5 +173,5 @@ function slugify($string){
 	$replace = array('-','a','a','a','a','a','a','a','A','A','A','A','e','e','e','e','E','E','E','E','i','i','i','i','I','I','I','o','o','o','o','o','o','o','O','O','O','O','u','u','u','u','U','U','U','c','C','N','n');
     $slug = trim(str_replace($search, $replace, $string)); // substitute the spaces with hyphens
     $slug = strtolower($slug); // lower-case the string
-	return ereg_replace('[^A-Za-z0-9\_\.\-]', '', $slug); // remove all non-alphanumeric characters except for spaces and hyphens
+	return preg_replace('[^A-Za-z0-9\_\.\-]', '', $slug); // remove all non-alphanumeric characters except for spaces and hyphens
 }
