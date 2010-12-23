@@ -3,6 +3,8 @@
 <h2 class="subtitle"><?php echo __('How to use Tagger?'); ?></h2>
 <p><?php echo __('You can add Tags to your pages by including this snippet into the page which you want the tags to appear.'); ?></p>
 <p class="code bottom-5"><code>&lt;?php $this->includeSnippet('tags'); ?&gt;</code></p>
+<p><?php echo __('or you can use:'); ?></p>
+<p class="code bottom-5"><code>&lt;?php tagger(); ?&gt;</code></p>
 <h2 class="subtitle"><?php echo __('Overide Tagger Settings'); ?></h2>
 <p><?php echo __('Tagger is configurable. Set parameters by editing Snippets->tags and changing the following valid parameters.  All of the options below are optional.'); ?></p>
 <p>
@@ -25,7 +27,7 @@
 		a number (without quotes) of the tagger page, this will then point all the tags urls to this page.</li></ul>'); ?></li>
 	</ul>
 </p>
-<p class="code"><code>&lt;?php tagger(array('type' => 'count', 'case' => true, 'limit' => 5, 'parent' => 4)); ?&gt;</code></p>
+<p class="code"><code>&lt;?php tagger(array('type' => 'count', 'case' => true, 'limit' => 5, 'parent' => 4, 'tagger_page' => 10)); ?&gt;</code></p>
 <h2 class="subtitle"><?php echo __('Tag Links'); ?></h2>
 <p><?php echo __('If you would like to have the default tags, that appear in the archives just before clicking a page link, show up as links, please edit your archive and change the line that says:'); ?></p>
 <p class="code bottom-5"><code>&lt;?php echo join(', ', $article->tags()); ?&gt;</code></p>
@@ -37,4 +39,4 @@
 <p class="code bottom-20">
 	<code>&lt;?php echo tag_links($article->tags(), array('delimiter' => ' - ', 'tagger_page' => 10)); ?&gt;</code>
 </p>
-<p><?php echo __('The second parameter is not required as this will default to a comma if you choose not to set it.'); ?></p>
+<p><?php echo __('The second parameter is not required as this will default to a comma and NULL if you choose not to set it.'); ?></p>
