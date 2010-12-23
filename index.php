@@ -14,7 +14,7 @@ Plugin::setInfos(array(
     'id'          => 'tagger',
     'title'       => 'Tagger',
     'description' => 'Add tags to any page and organize your website.',
-    'version'     => '1.2.6',
+    'version'     => '1.3.0',
     'license'     => 'MIT',
     'author'      => 'Andrew Smith and Tyler Beckett',
     'website'     => 'http://www.tbeckett.net/articles/plugins/tagger.xhtml',

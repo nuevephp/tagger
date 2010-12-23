@@ -5,10 +5,10 @@
  *
  * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>
  * Copyright (C) 2008 - 2010 Andrew Smith <a.smith@silentworks.co.uk>
- * Copyright (C) 2008 Tyler Beckett <tyler@tbeckett.net>
+ * Copyright (C) 2008 - 2010 Tyler Beckett <tyler@tbeckett.net>
  * 
- * Dual licensed under the MIT (mit-license.txt)
- * and GPL (gpl-license.txt) licenses.
+ * Dual licensed under the MIT (license/mit-license.txt)
+ * and GPL (license/gpl-license.txt) licenses.
  */
 
 Introduction and Brief History:
