@@ -1,30 +1,20 @@
 <?php 
 
 /**
- * Tagger Plugin for Frog CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger>
+ * Tagger Plugin for Wolf CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
  * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>
- * Copyright (C) 2008 Andrew Smith <a.smith@silentworks.co.uk>
- * Copyright (C) 2008 Tyler Beckett <tyler@tbeckett.net>
-
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
-
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Copyright (C) 2008 - 2010 Andrew Smith <a.smith@silentworks.co.uk>
+ * Copyright (C) 2008 - 2010 Tyler Beckett <tyler@tbeckett.net>
+ * 
+ * Dual licensed under the MIT (license/mit-license.txt)
+ * and GPL (license/gpl-license.txt) licenses.
  */
 
 /**
- * class PagePart
+ * class Tagger
  *
- * @author Philippe Archambault <philippe.archambault@gmail.com>
- * @since  0.8.7
+ * @author Andrew Smith <a.smith@silentworks.co.uk>
+ * @author Tyler Beckett <tyler@tbeckett.net>
  */
 
 class Tagger extends Tag
@@ -76,12 +66,71 @@ class Tagger extends Tag
             'limit' => 1
         ));
     }
+
+	/*
+	 * Purges old Tags from the database and reconstructs the number of tags
+	 *
+	 * @since 1.2.4
+	 */
+	public function purge_old ()
+	{
+		$sql = 'SELECT * FROM '.TABLE_PREFIX.'page_tag ORDER BY tag_id ASC';
+		$pdo = Record::getConnection();
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+
+		// Retrieve all Tag IDs into an array with tag_id as value
+		while($tag = $stmt->fetchObject()) $tags[$tag->tag_id] = $tag->tag_id;
+
+		// Retrieve actual count of Tags and add count to array
+		foreach($tags as $id)
+		{
+			$sql = 'SELECT * FROM '.TABLE_PREFIX.'page_tag WHERE tag_id = "'.$id.'"';
+			$pdo = Record::getConnection();
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute();
+			$count[$id] = $stmt->rowCount();
+		}
+
+		// Retrieve current tag counts and store to array with a zero value
+		$sql = 'SELECT * FROM '.TABLE_PREFIX.'tag ORDER BY id ASC';
+		$pdo = Record::getConnection();
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+
+		while($old = $stmt->fetchObject()) $current[$old->id] = $old->id;
+
+		foreach($current as $id)
+		{
+			$current2[$id] = 0;
+		}
+
+		$new = array_replace($current2, $count);
+
+		// Update actual count of Tag table with actual count from page_tag table.
+		foreach($current as $id)
+		{
+			if ($new[$id] == 0)
+			{
+				$sql = 'DELETE FROM '.TABLE_PREFIX.'tag WHERE id = "'.$id.'"';
+			}
+			else
+			{
+				$sql = 'UPDATE '.TABLE_PREFIX.'tag SET count = "'.$new[$id].'" WHERE id = "'.$id.'"';
+			}
+
+			$pdo = Record::getConnection();
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute();
+		}
+
+		Flash::set('success', __('Purge & Recount Complete!'));
+	}
     
     /**
 	 * Gives the name of the tag fields
 	 *
 	 * @since 1.1.0
-	 *
 	 * @param int $value
 	 */
     public function sortField($value) {
