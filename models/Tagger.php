@@ -133,7 +133,7 @@ class Tagger extends Tag
 	 * @since 1.1.0
 	 * @param int $value
 	 */
-    public function sortField($value) {
+    public function sortField($value = NULL) {
     	$fields = array('id', 'name', 'count');
     	return isset($value) ? $fields[$value] : $fields;
     }

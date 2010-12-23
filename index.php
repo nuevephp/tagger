@@ -60,7 +60,7 @@ function tag_url($page_id = NULL)
  * @since 0.0.8
  * @param string booleon booleon
  */
-function tagger($option = NULL)
+function tagger($option = array())
 {	
 	// Setting Limit, Parent and Tagger page if selected
 	$limit_set = array_key_exists('limit', $option) ? " LIMIT 0, {$option['limit']}" : NULL;
