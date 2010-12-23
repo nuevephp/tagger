@@ -41,14 +41,12 @@ function cmpVals($val1, $val2)
  * @since 1.2.0
 */
 function tag_url($page_id = NULL)
-{
-	global $__CMS_CONN__;
-	
+{	
 	$page_option = ($page_id !== NULL) ? " AND id = {$page_id}" : "";
 	
     $sql = 'SELECT DISTINCT(slug) FROM '.TABLE_PREFIX.'page WHERE behavior_id = "tagger"' . $page_option;
 
-    $stmt = $__CMS_CONN__->prepare($sql);
+    $stmt = Record::getConnection()->prepare($sql);
     $stmt->execute();
 
     if (!is_null($slug = $stmt->fetchColumn())) {
@@ -63,16 +61,14 @@ function tag_url($page_id = NULL)
  * @param string booleon booleon
  */
 function tagger($option = NULL)
-{
-    global $__CMS_CONN__;
-	
+{	
 	// Setting Limit, Parent and Tagger page if selected
 	$limit_set = array_key_exists('limit', $option) ? " LIMIT 0, {$option['limit']}" : NULL;
 	$parent = array_key_exists('parent', $option) ? " AND page.parent_id = {$option['parent']}" : NULL;
 	$tagger_page = array_key_exists('tagger_page', $option) ? $option['tagger_page'] : NULL;
 	
     $sql = 'SELECT name, count FROM '.TABLE_PREFIX.'tag AS tag, '.TABLE_PREFIX.'page AS page, '.TABLE_PREFIX.'page_tag AS page_tag WHERE tag.id = page_tag.tag_id AND page_tag.page_id = page.id AND page.status_id != '.Page::STATUS_HIDDEN.' AND page.status_id != '.Page::STATUS_DRAFT . $parent . $limit_set;
-    $stmt = $__CMS_CONN__->prepare($sql);
+    $stmt = Record::getConnection()->prepare($sql);
     $stmt->execute();
 
     // Putting Tags into a array
@@ -80,7 +76,7 @@ function tagger($option = NULL)
 		$tags[$tag->name] = $tag->count;
 	}
 
-    if($tags) {
+    if(isset($tags)) {
 		// Sort array
 		uksort($tags,'cmpVals');
 

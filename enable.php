@@ -26,12 +26,15 @@ if ($driver == 'mysql')
 // Create Snippet
 $PDO->exec("INSERT INTO ".TABLE_PREFIX."snippet (name, filter_id, content, content_html, created_on, created_by_id) VALUES ('tags', '', '<h3>Tags</h3>\r\n<?php tagger(); ?>', '<h3>Tags</h3>\r\n<?php tagger(); ?>', '".date('Y-m-d H:i:s')."', 1)");
 
-// Store settings new style
-$settings = array('tag_type' => 'count',
-                  'case' => '0',
-                  'rowspage' => '15',
-                  'sort_field' => '0',
-                  'sort_order' => 'ASC'
-                 );
+// Check if the plugin's settings already exist and create them if not.
+if (Plugin::getSetting('tag_type', 'tagger') === false) {
+	// Store settings new style
+	$settings = array('tag_type' => 'count',
+	                  'case' => '0',
+	                  'rowspage' => '15',
+	                  'sort_field' => '0',
+	                  'sort_order' => 'ASC'
+	                 );
 
-Plugin::setAllSettings($settings, 'tagger');
+	Plugin::setAllSettings($settings, 'tagger');
+}

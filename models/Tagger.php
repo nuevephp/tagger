@@ -40,7 +40,7 @@ class Tagger extends Tag
         // Prepare SQL
         $sql = "SELECT * FROM $tablename"." $where_string $order_by_string $limit_string";
 
-        $stmt = self::$__CONN__->prepare($sql);
+        $stmt = Record::getConnection()->prepare($sql);
         $stmt->execute();
 
         // Run!

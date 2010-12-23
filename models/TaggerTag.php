@@ -34,7 +34,7 @@ class TaggerTag extends PageTag
 		// Prepare SQL
         $sql = 'SELECT page.*, tag.id AS tagid FROM '.TABLE_PREFIX.'page AS page, '.TABLE_PREFIX.'page_tag AS page_tag, '.TABLE_PREFIX.'tag AS tag WHERE page.id = page_tag.page_id AND page_tag.tag_id ='. $id;
 
-        $stmt = self::$__CONN__->prepare($sql);
+        $stmt = Record::getConnection()->prepare($sql);
         $stmt->execute();
 
 		while($page = $stmt->fetchObject()) $pages[$page->id] = $page->title;
@@ -59,7 +59,7 @@ class TaggerTag extends PageTag
 
     public static function deleteByTagId($id)
     {
-        return self::$__CONN__->exec('DELETE FROM '.self::tableNameFromClassName('TaggerTag').' WHERE tag_id='.(int)$id) === false ? false: true;
+        return Record::getConnection()->exec('DELETE FROM '.self::tableNameFromClassName('TaggerTag').' WHERE tag_id='.(int)$id) === false ? false: true;
     }
 
 } // end PagePart class
