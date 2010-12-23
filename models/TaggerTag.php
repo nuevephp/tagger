@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Tagger Plugin for Frog CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
+ * Tagger Plugin for Wolf CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
  * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>
  * Copyright (C) 2008 - 2010 Andrew Smith <a.smith@silentworks.co.uk>
- * Copyright (C) 2008 Tyler Beckett <tyler@tbeckett.net>
+ * Copyright (C) 2008 - 2010 Tyler Beckett <tyler@tbeckett.net>
  * 
- * Dual licensed under the MIT (mit-license.txt)
- * and GPL (gpl-license.txt) licenses.
+ * Dual licensed under the MIT (license/mit-license.txt)
+ * and GPL (license/gpl-license.txt) licenses.
  */
 
 /**
@@ -29,6 +29,8 @@ class TaggerTag extends PageTag
 
 	public function findTagsAndPageAssigned($id)
 	{
+		$pages = NULL;
+		
 		// Prepare SQL
         $sql = 'SELECT page.*, tag.id AS tagid FROM '.TABLE_PREFIX.'page AS page, '.TABLE_PREFIX.'page_tag AS page_tag, '.TABLE_PREFIX.'tag AS tag WHERE page.id = page_tag.page_id AND page_tag.tag_id ='. $id;
 

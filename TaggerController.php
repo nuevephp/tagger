@@ -1,27 +1,26 @@
 <?php
 
 /**
- * Tagger Plugin for Frog CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
+ * Tagger Plugin for Wolf CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
  * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>
  * Copyright (C) 2008 - 2010 Andrew Smith <a.smith@silentworks.co.uk>
- * Copyright (C) 2008 Tyler Beckett <tyler@tbeckett.net>
+ * Copyright (C) 2008 - 2010 Tyler Beckett <tyler@tbeckett.net>
  * 
- * Dual licensed under the MIT (mit-license.txt)
- * and GPL (gpl-license.txt) licenses.
+ * Dual licensed under the MIT (license/mit-license.txt)
+ * and GPL (license/gpl-license.txt) licenses.
  */
 
 /**
  * The Tagger plugin provides an interface to add, edit and delete tags.
  *
- * @package frog
+ * @package wolf
  * @subpackage plugin.tagger
  *
  * @author Andrew Smith <a.smith@silentworks.co.uk>
  * @author Tyler Beckett <tyler@tbeckett.net>
  * @version 1.1.0
  * @since Frog version 0.9.3
- * @license http://www.gnu.org/licenses/agpl.html AGPL License
- * @copyright Andrew Smith, Tyler Beckett, 2008
+ * @copyright Andrew Smith, Tyler Beckett, 2008 - 2010
  */
 
 // Include Tagger Models
@@ -217,6 +216,21 @@ class TaggerController extends PluginController
                           'sort_order' => $tmp['sort_order']
                          );
         $this->display('tagger/views/settings', $settings);
+    }
+
+	/**
+	 * Purge & Recount for Tagger to update and purge unused tags
+	 *
+	 * @since 1.2.4
+	 *
+	 */
+	function purge() {
+		$this->display('tagger/views/purge');
+    }
+
+	function purged() {
+		Tagger::purge_old();
+		redirect(get_url('plugin/tagger'));
     }
 
     /**

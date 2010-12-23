@@ -19,8 +19,10 @@
 		</li>
 		<li><?php echo __('<strong>Limit:</strong> By default it is unlimited (blank).<ul style="text-indent: 15px;"><li>You can enter
 		a number here (without quotes) to limit the number of tags that will be displayed.</li></ul>'); ?></li>
-		<li><?php echo __('<strong>Parent:</strong> By default it is none (blank). <em class="new">New 1.2.0</em><ul style="text-indent: 15px;"><li>You can enter
+		<li><?php echo __('<strong>Parent:</strong> By default it is null (blank). <em class="new">New 1.2.0</em><ul style="text-indent: 15px;"><li>You can enter
 		a number (without quotes) of the parent page, this will then display all the tags in the children pages only.</li></ul>'); ?></li>
+		<li><?php echo __('<strong>Tagger Page:</strong> By default it is null (blank). <em class="new">New 1.2.6</em><ul style="text-indent: 15px;"><li>You can enter
+		a number (without quotes) of the tagger page, this will then point all the tags urls to this page.</li></ul>'); ?></li>
 	</ul>
 </p>
 <p class="code"><code>&lt;?php tagger(array('type' => 'count', 'case' => true, 'limit' => 5, 'parent' => 4)); ?&gt;</code></p>
@@ -33,6 +35,6 @@
 </p>
 <p><?php echo __('The new Tag Links function give you the flexibility to be able to change a second parameter to the delimites you wish, so you could have'); ?></p>
 <p class="code bottom-20">
-	<code>&lt;?php echo tag_links($article->tags(), ' - '); ?&gt;</code>
+	<code>&lt;?php echo tag_links($article->tags(), array('delimiter' => ' - ', 'tagger_page' => 10)); ?&gt;</code>
 </p>
 <p><?php echo __('The second parameter is not required as this will default to a comma if you choose not to set it.'); ?></p>

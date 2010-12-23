@@ -1,16 +1,3 @@
-<?php
-
-/**
- * Tagger Plugin for Frog CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
- * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>
- * Copyright (C) 2008 - 2010 Andrew Smith <a.smith@silentworks.co.uk>
- * Copyright (C) 2008 Tyler Beckett <tyler@tbeckett.net>
- * 
- * Dual licensed under the MIT (mit-license.txt)
- * and GPL (gpl-license.txt) licenses.
- */
-
-?>
 <h1><?php echo __('Tagger Plugin'); ?></h1>
 
 <form action="<?php echo get_url('plugin/tagger/save'); ?>" method="post">
