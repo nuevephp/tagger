@@ -38,69 +38,49 @@ class Tagger
     public function pagesByTag($params = false)
 	{
 		$pdoConn = Record::getConnection();
-		
-		// Count rows in table
-		$query_count = "SELECT count(*) FROM ".TABLE_PREFIX."page;";
-		$qc1 = $pdoConn->query($query_count);
-
-		if($qc1->fetchColumn() > 0) {
-			// Execute real query
-			$query1 = "SELECT parent_id, id, slug FROM ".TABLE_PREFIX."page AS page ORDER BY page.position ASC;";
-			$pdo1 = $pdoConn->prepare($query1);
-			$pdo1->execute();
-			
-			while($article = $pdo1->fetchObject()) {
-				$archive[] = array(
-					'slug' => $article->slug,
-					'pid' => $article->parent_id,
-					'id' => $article->id);
-			}
-		}
-
-		$url = array();
-		foreach($archive as $parent) {
-			$url[$parent['id']] = $parent['slug'].'/';
-			$pid = $parent['pid'];
-			while ($pid != 0) {
-				$query2 = "SELECT parent_id, slug FROM ".TABLE_PREFIX."page AS page WHERE page.id = '$pid' ORDER BY page.position ASC;";
-				$pdo2 = $pdoConn->prepare($query2);
-				$pdo2->execute();
-				$query = $pdo2->fetchObject();
-				$pid = $query->parent_id;
-				$url[$parent['id']] = $query->slug.'/'.$url[$parent['id']];
-			}
-			// Trims the initial ' / ' off the front of the url
-			$url[$parent['id']] = substr($url[$parent['id']], 1);
-		}
 
 		if(!$params) $params = $this->params;
-
-		$tagged = array();
+		
+		$pages = array();
 
 		$tag_unslugified = unslugify(isset($params[0]) ? $params[0] : NULL);
 		$tag = isset($params[0]) ? $params[0] : NULL;
 		
+		$where = " WHERE page.id = page_tag.page_id AND page_tag.tag_id = tag.id AND ((tag.name = '$tag') OR (tag.name = '$tag_unslugified'))"
+		 		." AND page.status_id != ".Page::STATUS_HIDDEN." AND page.status_id != ".Page::STATUS_DRAFT." ORDER BY page.created_on DESC";
+		
 		// Count rows in table
-		$sql_count = "SELECT count(*) FROM ".TABLE_PREFIX."page AS page, ".TABLE_PREFIX."page_tag AS page_tag, ".TABLE_PREFIX."tag AS tag WHERE page.id = page_tag.page_id AND page_tag.tag_id = tag.id AND ((tag.name = '$tag') OR (tag.name = '$tag_unslugified')) AND page.status_id != ".Page::STATUS_HIDDEN." AND page.status_id != ".Page::STATUS_DRAFT." ORDER BY page.created_on DESC";
-		$qc2 = $pdoConn->query($sql_count);
+		$sql_count = "SELECT count(*) FROM ".TABLE_PREFIX."page AS page, ".TABLE_PREFIX."page_tag AS page_tag, ".TABLE_PREFIX."tag AS tag" . $where;
+		
+		$query = $pdoConn->query($sql_count);
 
-		if($qc2->fetchColumn() > 0) {
+		if($query->fetchColumn() > 0) {
 			
-			$query3 = "SELECT * FROM ".TABLE_PREFIX."page AS page, ".TABLE_PREFIX."page_tag AS page_tag, ".TABLE_PREFIX."tag AS tag WHERE page.id = page_tag.page_id AND page_tag.tag_id = tag.id AND ((tag.name = '$tag') OR (tag.name = '$tag_unslugified')) AND page.status_id != ".Page::STATUS_HIDDEN." AND page.status_id != ".Page::STATUS_DRAFT." ORDER BY page.created_on DESC";
-			$pdo3 = $pdoConn->prepare($query3);
-			$pdo3->execute();
+			$sql = "SELECT page.* FROM ".TABLE_PREFIX."page AS page, ".TABLE_PREFIX."page_tag AS page_tag, ".TABLE_PREFIX."tag AS tag" . $where;
 			
-			while ($content = $pdo3->fetchObject()) {
-				if(isset($url[$content->parent_id])) {
-					$tagged[BASE_URL . $url[$content->parent_id] . $content->slug . URL_SUFFIX] = $content->title;
-				} else {
-					$tagged[BASE_URL . $content->slug . URL_SUFFIX] = $content->title;
-				}
+			$stmt = $pdoConn->prepare($sql);
+			$stmt->execute();
+			
+			while ($object = $stmt->fetchObject()) {
+				$page = new PageTagger($object, $this);
+				
+				// assignParts
+                $page->part = get_parts($page->id);
+                $pages[] = $page;
 			}
 		} else return false;
 
-		return $tagged;
+		return $pages;
 	}
+}
+
+class PageTagger extends Page
+{
+	protected function setUrl()
+    {
+		$page = Page::findById($this->id);
+        $this->url = trim($page->getUri(), '/');
+    }
 }
 
 /**

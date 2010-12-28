@@ -14,7 +14,7 @@ Plugin::setInfos(array(
     'id'          => 'tagger',
     'title'       => 'Tagger',
     'description' => 'Add tags to any page and organize your website.',
-    'version'     => '1.3.1',
+    'version'     => '1.4.0',
     'license'     => 'MIT',
     'author'      => 'Andrew Smith and Tyler Beckett',
     'website'     => 'http://www.tbeckett.net/articles/plugins/tagger.xhtml',
@@ -68,8 +68,12 @@ function tagger($option = array())
 	$limit_set = array_key_exists('limit', $option) ? " LIMIT 0, {$option['limit']}" : NULL;
 	$parent = array_key_exists('parent', $option) ? " AND page.parent_id = {$option['parent']}" : NULL;
 	$tagger_page = array_key_exists('tagger_page', $option) ? $option['tagger_page'] : NULL;
+	$tpl = array_key_exists('tagger_tpl', $option) ? $option['tagger_tpl'] : NULL;
 	
-    $sql = 'SELECT name, count FROM '.TABLE_PREFIX.'tag AS tag, '.TABLE_PREFIX.'page AS page, '.TABLE_PREFIX.'page_tag AS page_tag WHERE tag.id = page_tag.tag_id AND page_tag.page_id = page.id AND page.status_id != '.Page::STATUS_HIDDEN.' AND page.status_id != '.Page::STATUS_DRAFT . $parent . $limit_set;
+    $sql = 'SELECT name, count FROM '.TABLE_PREFIX.'tag AS tag, '.TABLE_PREFIX.'page AS page, '.TABLE_PREFIX.'page_tag AS page_tag'
+		   .' WHERE tag.id = page_tag.tag_id AND page_tag.page_id = page.id AND page.status_id != '.Page::STATUS_HIDDEN.' AND'
+		   .' page.status_id != '.Page::STATUS_DRAFT . $parent . $limit_set;
+	
     $stmt = Record::getConnection()->prepare($sql);
     $stmt->execute();
 
@@ -121,24 +125,45 @@ function tagger($option = array())
 				echo '</ul>';
 			break;
 			case "count":
-				echo '<ul class="tagger">';
-				// loop through the tag array
-				foreach ($tags as $key => $value) {
-					$key_case = $tag_case == "1" ? ucfirst($key) : strtolower($key);
-					echo '<li><a href="'. tag_url($tagger_page) . slugify($key) . URL_SUFFIX .'" title="' . $value . ' things tagged with ' . $key . '">' . $key_case . ' ('. $value .')</a></li>';
+				if($tpl) {
+					eval('?>'.includeSnippet($tpl));
+				} else {
+					echo '<ul class="tagger">';
+					// loop through the tag array
+					foreach ($tags as $key => $value) {
+						$key_case = $tag_case == "1" ? ucfirst($key) : strtolower($key);
+						echo '<li><a href="'. tag_url($tagger_page) . slugify($key) . URL_SUFFIX .'" title="' . $value . ' things tagged with ' . $key . '">' . $key_case . ' ('. $value .')</a></li>';
+					}
+					echo '</ul>';
 				}
-				echo '</ul>';
 			break;
 			default:
-				echo '<ul class="tagger">';
-				// loop through the tag array
-				foreach ($tags as $key => $value) {
-					$key_case = $tag_case == 1 ? ucfirst($key) : strtolower($key);
-					echo '<li><a href="'. tag_url($tagger_page) . slugify($key) . URL_SUFFIX .'" title="' . $value . ' things tagged with ' . $key . '">' . htmlspecialchars_decode($key_case) . '</a></li>';
+				if($tpl) {
+					eval('?>'.includeSnippet($tpl));
+				} else {
+					echo '<ul class="tagger">';
+					// loop through the tag array
+					foreach ($tags as $key => $value) {
+						$key_case = $tag_case == 1 ? ucfirst($key) : strtolower($key);
+						echo '<li><a href="'. tag_url($tagger_page) . slugify($key) . URL_SUFFIX .'" title="' . $value . ' things tagged with ' . $key . '">' . htmlspecialchars_decode($key_case) . '</a></li>';
+					}
+					echo '</ul>';
 				}
-				echo '</ul>';
 			break;
 		}
+    }
+}
+
+function includeSnippet($name) {
+    global $__CMS_CONN__;
+
+    $sql = 'SELECT content_html FROM '.TABLE_PREFIX.'snippet WHERE name LIKE ?';
+
+    $stmt = $__CMS_CONN__->prepare($sql);
+    $stmt->execute(array($name));
+
+    if ($snippet = $stmt->fetchObject()) {
+        return $snippet->content_html;
     }
 }
 

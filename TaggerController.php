@@ -238,7 +238,12 @@ class TaggerController extends PluginController
 	 *
 	 * @since 1.0.0
 	 */
-	public function documentation() {
-        $this->display('tagger/views/documentation');
+	public function documentation($page = 'index') {
+		try {
+			$var['content_for_documentation'] = new View('../../plugins/tagger/views/documentation/'. $page);
+		} catch (Exception $e) {
+			$var['content_for_documentation'] = new View('../../plugins/tagger/views/documentation/index');
+		}
+        $this->display('tagger/views/documentation/main', $var);
     }
 } // end TaggerController class

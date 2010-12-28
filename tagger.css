@@ -7,13 +7,99 @@
  * Dual licensed under the MIT (license/mit-license.txt)
  * and GPL (license/gpl-license.txt) licenses.
  */
+a {
+	color: #0134c5;
+	background-color: transparent;
+	text-decoration: none;
+	font-weight: normal;
+}
+a:visited {
+	color: #0134c5;
+	background-color: transparent;
+	text-decoration: none;
+}
+a:hover {
+	color: #000;
+	text-decoration: none;
+	background-color: transparent;
+}
+#tagger_content h1 {
+	color: #e13300;
+	border-bottom: 1px solid #666;
+	border-radius: 0;
+	background-color: transparent;
+	font-weight: normal;
+	font-size: 24px;
+	margin: 0 0 20px 0;
+	padding: 3px 0 7px 3px;
+	text-shadow: none;
+}
+#tagger_content h2 {
+	background-color: transparent;
+	border-bottom: 1px solid #999;
+	color: #000;
+	font-size: 18px;
+	font-weight: bold;
+	margin: 28px 0 16px 0;
+	padding: 5px 0 6px 0;
+}
+
+#tagger_content h3 {
+	background-color: transparent;
+	color: #333;
+	font-size: 16px;
+	font-weight: bold;
+	margin: 16px 0 15px 0;
+	padding: 0 0 0 0;
+}
+
+#tagger_content h4 {
+	background-color: transparent;
+	color: #444;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 22px 0 0 0;
+	padding: 0 0 0 0;
+}
+#tagger_content code {
+	font-family: Monaco, Verdana, Sans-serif;
+	font-size: 12px;
+	background-color: #f9f9f9;
+	border: 1px solid #D0D0D0;
+	color: #002166;
+	display: block;
+	margin: 14px 0 14px 0;
+	padding: 12px 10px 12px 10px;
+}
+#tagger_content var {
+	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	color: #8F5B00;
+	font-weight: bold;
+	font-style: normal;
+}
+#tagger_content samp {
+	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	color: #480091;
+	font-weight: bold;
+	font-style: normal;
+}
+#tagger_content p {
+	margin: 12px 20px 12px 0;
+}
+#tagger_content ul {
+	margin: 10px 0 12px;
+}
+#tagger_content ul li {
+	margin-bottom: 9px;
+}
+#tagger_content ul li p {
+	margin: 5px 0 6px 20px;
+}
 
 ul.tagged 	{ font-size: 0.7em; text-indent: 40px; }
 ul.tagged li	{ display: inline; padding: 2px 1px; border: none; }
 #snippets .tagged a	{ top: 0; }
-h2.subtitle { font-size: 1.0em; background-color: #eee; padding: 5px 0; text-indent: 5px; }
 em.new { color: #f00; }
-.code { background-color: #ffffcc; padding: 5px; }
 .bottom-5 { margin-bottom: 5px; }
 .bottom-10 { margin-bottom: 10px; }
 .bottom-15 { margin-bottom: 15px; }
