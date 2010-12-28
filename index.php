@@ -30,62 +30,93 @@ define('TAGGER_ROOT', URI_PUBLIC.'wolf/plugins/tagger');
 Plugin::addController('tagger', 'Tagger');
 Behavior::add('tagger', 'tagger/tagger.php');
 
-function cmpVals($val1, $val2)
-{
-	return strcasecmp($val1, $val2);
-}
-
 /**
- * Gets the url where pages are displayed based on tag selected
+ * Tagger Tag Cloud, Count and List new Object
  *
- * @since 1.2.0
+ * @since 1.4.0
 */
-function tag_url($page_id = NULL)
-{	
-	$page_option = ($page_id !== NULL) ? " AND id = {$page_id}" : "";
-	
-    $sql = 'SELECT id FROM '.TABLE_PREFIX.'page WHERE behavior_id = "tagger"' . $page_option;
-
-    $stmt = Record::getConnection()->prepare($sql);
-    $stmt->execute();
-
-    if (!is_null($id = $stmt->fetchColumn())) {
-		$page = Page::findById($id);
-		$url = $page->getUri();
-		return BASE_URL . $url . '/';
+class Tags
+{
+	public function __construct($option = array())
+	{
+		return self::render($option);
 	}
-}
-
-/**
- * Display tags on a page
- *
- * @since 0.0.8
- * @param string booleon booleon
- */
-function tagger($option = array())
-{	
-	// Setting Limit, Parent and Tagger page if selected
-	$limit_set = array_key_exists('limit', $option) ? " LIMIT 0, {$option['limit']}" : NULL;
-	$parent = array_key_exists('parent', $option) ? " AND page.parent_id = {$option['parent']}" : NULL;
-	$tagger_page = array_key_exists('tagger_page', $option) ? $option['tagger_page'] : NULL;
-	$tpl = array_key_exists('tagger_tpl', $option) ? $option['tagger_tpl'] : NULL;
 	
-    $sql = 'SELECT name, count FROM '.TABLE_PREFIX.'tag AS tag, '.TABLE_PREFIX.'page AS page, '.TABLE_PREFIX.'page_tag AS page_tag'
-		   .' WHERE tag.id = page_tag.tag_id AND page_tag.page_id = page.id AND page.status_id != '.Page::STATUS_HIDDEN.' AND'
-		   .' page.status_id != '.Page::STATUS_DRAFT . $parent . $limit_set;
-	
-    $stmt = Record::getConnection()->prepare($sql);
-    $stmt->execute();
+	/**
+	 * Gets the url where pages are displayed based on tag selected
+	 *
+	 * @since 1.4.0
+	*/
+	public static function tag_url($page_id = NULL)
+	{
+		$page_option = ($page_id !== NULL) ? " AND id = {$page_id}" : "";
 
-    // Putting Tags into a array
-    while($tag = $stmt->fetchObject()) {
-		$tags[$tag->name] = $tag->count;
+	    $sql = 'SELECT id FROM '.TABLE_PREFIX.'page WHERE behavior_id = "tagger"' . $page_option;
+		
+	    $stmt = Record::getConnection()->prepare($sql);
+	    $stmt->execute();
+		$id = $stmt->fetchColumn();
+		
+	    if (!is_null($id) && $id !== false) {
+			$page = Page::findById($id);
+			$url = $page->getUri();
+			return BASE_URL . $url . '/';
+		} else {
+			return self::tag_url(NULL);
+		}
 	}
+	
+	/**
+	 * Display tags as links.
+	 *
+	 * @since 1.4.0
+	 * @param object $tags
+	 */
+	public static function tag_links($tags, $option = array())
+	{
+		$delimiter = array_key_exists('delimiter', $option) ? $option['delimiter'] : ', ';
+		$tagger_page = array_key_exists('tagger_page', $option) ? $option['tagger_page'] : NULL;
+		
+		$i = 1;
+		foreach($tags as $tag){
+			$url = self::tag_url($tagger_page) . $tag . URL_SUFFIX;
+			$end = $i == count($tags) ? '.' : $delimiter;
+			
+			echo sprintf('<a href="%s">%s</a>%s', 
+				$url, 
+				$tag,
+				$end
+				);
+			$i++;
+		}
+	}
+	
+	/**
+	 * Load Snippet that has template for Tagger.
+	 *
+	 * @since 1.4.0
+	 * @param string $name
+	 */
+	public function tpl($name)
+	{
+		$sql = 'SELECT content_html FROM '.TABLE_PREFIX.'snippet WHERE name LIKE ?';
 
-    if(isset($tags)) {
-		// Sort array
-		uksort($tags,'cmpVals');
+	    $stmt = Record::getConnection()->prepare($sql);
+	    $stmt->execute(array($name));
 
+	    if ($snippet = $stmt->fetchObject()) {
+	        return $snippet->content_html;
+	    }
+	}
+	
+	/**
+	 * Display tags on a page
+	 *
+	 * @since 1.4.0
+	 * @param string booleon booleon
+	 */
+	public function render($option = array())
+	{
 		// Tag settings from database
 		$tag_setting_type = Plugin::getSetting('tag_type', 'tagger');
 		$tag_setting_case = Plugin::getSetting('case', 'tagger');
@@ -93,94 +124,112 @@ function tagger($option = array())
 		// Tag display
 		$tag_type = array_key_exists('type', $option) ? $option['type'] : $tag_setting_type;
 		$tag_case = array_key_exists('case', $option) ? $option['case'] : $tag_setting_case;
+		
+		// Setting Limit, Parent and Tagger page if selected
+		$limit_set = array_key_exists('limit', $option) ? " LIMIT 0, {$option['limit']}" : NULL;
+		$parent = array_key_exists('parent', $option) ? " AND page.parent_id = {$option['parent']}" : NULL;
+		$tagger_page = array_key_exists('tagger_page', $option) ? $option['tagger_page'] : NULL;
+		$tpl = array_key_exists('tagger_tpl', $option) ? $option['tagger_tpl'] : NULL;
 
-		switch($tag_type) {
-			case "cloud":
-				$max_size = 32; // max font size in pixels
-				$min_size = 12; // min font size in pixels
+	    $sql = 'SELECT name, count FROM '.TABLE_PREFIX.'tag AS tag, '.TABLE_PREFIX.'page AS page, '.TABLE_PREFIX.'page_tag AS page_tag'
+			   .' WHERE tag.id = page_tag.tag_id AND page_tag.page_id = page.id AND page.status_id != '.Page::STATUS_HIDDEN.' AND'
+			   .' page.status_id != '.Page::STATUS_DRAFT . $parent . $limit_set;
 
-				// largest and smallest array values
-				$max_qty = max(array_values($tags));
-				$min_qty = min(array_values($tags));
+	    $stmt = Record::getConnection()->prepare($sql);
+	    $stmt->execute();
 
-				// find the range of values
-				$spread = $max_qty - $min_qty;
-				if ($spread == 0) { // we don't want to divide by zero
-					$spread = 1;
-				}
-
-				// set the font-size increment
-				$step = ($max_size - $min_size) / ($spread);
-				echo '<ul class="tagger">';
-				// loop through the tag array
-				foreach ($tags as $key => $value) {
-					// calculate font-size
-					// find the $value in excess of $min_qty
-					// multiply by the font-size increment ($size)
-					// and add the $min_size set above
-					$size = round($min_size + (($value - $min_qty) * $step));
-					$key_case = $tag_case == "1" ? ucfirst($key) : strtolower($key);
-					echo '<li style="display: inline; border: none;"><a href="'. tag_url($tagger_page) . slugify($key) . URL_SUFFIX .'" style="display: inline; border: none; font-size: ' . $size . 'px; padding: 2px" title="' . $value . ' things tagged with ' . $key . '">' . $key_case . "</a></li>\n";
-				}
-				echo '</ul>';
-			break;
-			case "count":
-				if($tpl) {
-					eval('?>'.includeSnippet($tpl));
-				} else {
-					echo '<ul class="tagger">';
-					// loop through the tag array
-					foreach ($tags as $key => $value) {
-						$key_case = $tag_case == "1" ? ucfirst($key) : strtolower($key);
-						echo '<li><a href="'. tag_url($tagger_page) . slugify($key) . URL_SUFFIX .'" title="' . $value . ' things tagged with ' . $key . '">' . $key_case . ' ('. $value .')</a></li>';
-					}
-					echo '</ul>';
-				}
-			break;
-			default:
-				if($tpl) {
-					eval('?>'.includeSnippet($tpl));
-				} else {
-					echo '<ul class="tagger">';
-					// loop through the tag array
-					foreach ($tags as $key => $value) {
-						$key_case = $tag_case == 1 ? ucfirst($key) : strtolower($key);
-						echo '<li><a href="'. tag_url($tagger_page) . slugify($key) . URL_SUFFIX .'" title="' . $value . ' things tagged with ' . $key . '">' . htmlspecialchars_decode($key_case) . '</a></li>';
-					}
-					echo '</ul>';
-				}
-			break;
+	    // Putting Tags into a array
+	    while($tag = $stmt->fetchObject()) {
+			$tags[$tag->name] = $tag->count;
 		}
-    }
-}
 
-function includeSnippet($name) {
-    global $__CMS_CONN__;
+	    if(isset($tags)) {
+			// Sort array
+			uksort($tags, 'cmpVals');
 
-    $sql = 'SELECT content_html FROM '.TABLE_PREFIX.'snippet WHERE name LIKE ?';
+			switch($tag_type) {
+				case "cloud":
+					$max_size = 32; // max font size in pixels
+					$min_size = 12; // min font size in pixels
 
-    $stmt = $__CMS_CONN__->prepare($sql);
-    $stmt->execute(array($name));
+					// largest and smallest array values
+					$max_qty = max(array_values($tags));
+					$min_qty = min(array_values($tags));
 
-    if ($snippet = $stmt->fetchObject()) {
-        return $snippet->content_html;
-    }
-}
+					// find the range of values
+					$spread = $max_qty - $min_qty;
+					if ($spread == 0) { $spread = 1; }
 
-/**
- * Display tags as links.
- *
- * @since 1.1.0
- * @param object $tags
- */
-function tag_links($tags, $option = array('delimiter' => ', ', 'tagger_page' => NULL))
-{
-	$i = 1;
-	foreach($tags as $tag){
-		echo '<a href="'. tag_url($option['tagger_page']) . $tag . URL_SUFFIX .'">' . $tag . '</a>';
-		echo $i == count($tags) ? '.' : $option['delimiter'];
-		$i++;
+					// set the font-size increment
+					$step = ($max_size - $min_size) / ($spread);
+					if($tpl) {
+						eval('?>'.self::tpl($tpl));
+					} else {
+						echo '<ul class="tagger">';
+						foreach ($tags as $key => $value) {
+							// calculate font-size, find the $value in excess of $min_qty, multiply by the font-size increment ($size) and add the $min_size set above
+							$size = round($min_size + (($value - $min_qty) * $step));
+							$key_case = ($tag_case == "1") ? ucfirst($key) : strtolower($key);
+							$url = self::tag_url($tagger_page) . slugify($key) . URL_SUFFIX;
+							
+							echo sprintf('<li style="display: inline; border: none;"><a href="%s"  style="display: inline; border: none; font-size: %spx; padding: 2px" title="%s things tagged with %s">%s</a></li>',
+								$url,
+								$size,
+								$value,
+								$key,
+								htmlspecialchars_decode($key_case)
+								);
+						}
+						echo '</ul>';
+					}
+				break;
+				case "count":
+					if($tpl) {
+						eval('?>'.self::tpl($tpl));
+					} else {
+						echo '<ul class="tagger">';
+						foreach ($tags as $key => $value) {
+							$key_case = ($tag_case == "1") ? ucfirst($key) : strtolower($key);
+							$url = self::tag_url($tagger_page) . slugify($key) . URL_SUFFIX;
+							
+							echo sprintf('<li><a href="%s" title="%s things tagged with %s">%s (%s)</a></li>',
+								$url,
+								$value,
+								$key,
+								htmlspecialchars_decode($key_case),
+								$value
+								);
+						}
+						echo '</ul>';
+					}
+				break;
+				default:
+					if($tpl) {
+						eval('?>'.self::tpl($tpl));
+					} else {
+						echo '<ul class="tagger">';
+						foreach ($tags as $key => $value) {
+							$key_case = ($tag_case == 1) ? ucfirst($key) : strtolower($key);
+							$url = self::tag_url($tagger_page) . slugify($key) . URL_SUFFIX;
+							
+							echo sprintf('<li><a href="%s" title="%s things tagged with %s">%s</a></li>',
+								$url,
+								$value,
+								$key,
+								htmlspecialchars_decode($key_case)
+								);
+						}
+						echo '</ul>';
+					}
+				break;
+			}
+	    }
 	}
+}
+
+function cmpVals($val1, $val2)
+{
+	return strcasecmp($val1, $val2);
 }
 
 /**
@@ -195,4 +244,40 @@ function slugify($string){
     $slug = trim(str_replace($search, $replace, $string)); // substitute the spaces with hyphens
     $slug = strtolower($slug); // lower-case the string
 	return preg_replace('[^A-Za-z0-9\_\.\-]', '', $slug); // remove all non-alphanumeric characters except for spaces and hyphens
+}
+
+// Backward Compatability functions
+/**
+ * Gets the url where pages are displayed based on tag selected
+ *
+ * @since 1.2.0
+ * @deprecated 1.4.0
+ */
+function tag_url($page_id = NULL)
+{
+	return Tags::tag_url($page_id);
+}
+
+/**
+ * Display tags on a page
+ *
+ * @since 0.0.8
+ * @param string booleon booleon
+ * @deprecated 1.4.0
+ */
+function tagger($option = array())
+{
+	return new Tags($option);
+}
+
+/**
+ * Display tags as links.
+ *
+ * @since 1.1.0
+ * @param object $tags
+ * @deprecated 1.4.0
+ */
+function tag_links($tags, $option = array())
+{
+	return Tags::tag_links($tags, $option);
 }

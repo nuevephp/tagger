@@ -13,18 +13,36 @@
 $PDO = Record::getConnection();
 $driver = strtolower($PDO->getAttribute(Record::ATTR_DRIVER_NAME));
 
-if ($driver == 'mysql')
-{
+if ($driver == 'mysql') {
+	
 	$query = $PDO->query("SELECT * FROM ".TABLE_PREFIX."page WHERE behavior_id = 'tagger'");
 
 	if(!$query->rowCount()){
 		// Create Pages
-		$PDO->exec("INSERT INTO ".TABLE_PREFIX."page (id, title, slug, breadcrumb, keywords, description, parent_id, layout_id, behavior_id, status_id, created_on, published_on, updated_on, created_by_id, updated_by_id, position, is_protected) VALUES('', 'Tag', 'tag', 'Tag', '', '', '1', '0', 'tagger', '101', '".date('Y-m-d H:i:s')."', NULL, NULL, '1', '1', '2', '0')");
-		$PDO->exec("INSERT INTO ".TABLE_PREFIX."page_part (id, name, filter_id, content, content_html, page_id) VALUES('', 'body', '', '<?php\r\n\$pages = \$this->tagger->pagesByTag();\r\nif(\$pages){\r\necho \"<h3>Pages tagged with ''\".\$this->tagger->tag().\"''</h3>\";\r\n      foreach(\$pages as \$slug => \$page)\r\n{\r\n		echo ''<h3><a href=\"''.\$slug.''\">''.\$page.''</a></h3>'';\r\n	}\r\n} else {\r\n	echo \"There are no items with this tag.\";\r\n}\r\n?>', '<?php\r\n\$pages = \$this->tagger->pagesByTag();\r\nif(\$pages){\r\necho \"<h3>Pages tagged with ''\".\$this->tagger->tag().\"''</h3>\";\r\n      foreach(\$pages as \$slug => \$page)\r\n{\r\n		echo ''<h3><a href=\"''.\$slug.''\">''.\$page.''</a></h3>'';\r\n	}\r\n} else {\r\n	echo \"There are no items with this tag.\";\r\n}\r\n?>', '".$PDO->lastInsertId()."')");
+		// Temporary variable, used to store current query
+		$sql = '';
+		// Read in entire file
+		$lines = file(dirname(__file__) . '/sql/install.sql');
+		// Loop through each line
+		foreach ($lines as $line)
+		{
+			// Skip it if it's a comment
+			if (substr($line, 0, 2) == '--' || $line == '')
+				continue;
+
+			// Add this line to the current segment
+			$sql .= $line;
+			// If it has a semicolon at the end, it's the end of the query
+			if (substr(trim($line), -1, 1) == ';')
+			{
+				// Perform the query
+				$PDO->exec(str_replace('{prefix}', TABLE_PREFIX, $sql)) or print('Error performing query \'<strong>' . $sql . '\': ' . mysql_error() . '<br /><br />');
+				// Reset temp variable to empty
+				$sql = '';
+			}
+		}
 	}
 }
-// Create Snippet
-$PDO->exec("INSERT INTO ".TABLE_PREFIX."snippet (name, filter_id, content, content_html, created_on, created_by_id) VALUES ('tags', '', '<h3>Tags</h3>\r\n<?php tagger(); ?>', '<h3>Tags</h3>\r\n<?php tagger(); ?>', '".date('Y-m-d H:i:s')."', 1)");
 
 // Check if the plugin's settings already exist and create them if not.
 if (Plugin::getSetting('tag_type', 'tagger') === false) {
