@@ -20,7 +20,7 @@
     </ul>
     <?php endif; ?>
     <img class="handle" src="../images/drag.gif" alt="<?php echo __('Drag and Drop'); ?>" align="middle" />
-    <div class="remove"><a href="<?php echo get_url('plugin/tagger/delete/'.$tag->id); ?>" onclick="return confirm('<?php echo __('Are you sure you wish to delete'); ?> <?php echo $tag->name; ?>?');"><img src="../images/icon-remove.gif" alt="remove icon" /></a></div>
+    <div class="remove"><a href="<?php echo get_url('plugin/tagger/delete/'.$tag->id); ?>" onclick="return confirm('<?php echo __('Are you sure you wish to delete'); ?> <?php echo $tag->name; ?>?');"><img src="<?php echo URI_PUBLIC . ADMIN_DIR; ?>/images/icon-remove.gif" alt="remove icon" /></a></div>
   </li>
 <?php endforeach; ?>
 </ul>

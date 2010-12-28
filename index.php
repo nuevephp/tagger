@@ -14,7 +14,7 @@ Plugin::setInfos(array(
     'id'          => 'tagger',
     'title'       => 'Tagger',
     'description' => 'Add tags to any page and organize your website.',
-    'version'     => '1.3.0',
+    'version'     => '1.3.1',
     'license'     => 'MIT',
     'author'      => 'Andrew Smith and Tyler Beckett',
     'website'     => 'http://www.tbeckett.net/articles/plugins/tagger.xhtml',
@@ -44,13 +44,15 @@ function tag_url($page_id = NULL)
 {	
 	$page_option = ($page_id !== NULL) ? " AND id = {$page_id}" : "";
 	
-    $sql = 'SELECT DISTINCT(slug) FROM '.TABLE_PREFIX.'page WHERE behavior_id = "tagger"' . $page_option;
+    $sql = 'SELECT id FROM '.TABLE_PREFIX.'page WHERE behavior_id = "tagger"' . $page_option;
 
     $stmt = Record::getConnection()->prepare($sql);
     $stmt->execute();
 
-    if (!is_null($slug = $stmt->fetchColumn())) {
-		return BASE_URL . $slug . '/';
+    if (!is_null($id = $stmt->fetchColumn())) {
+		$page = Page::findById($id);
+		$url = $page->getUri();
+		return BASE_URL . $url . '/';
 	}
 }
 
