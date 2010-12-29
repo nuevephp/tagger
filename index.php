@@ -19,7 +19,7 @@ Plugin::setInfos(array(
     'author'      => 'Andrew Smith and Tyler Beckett',
     'website'     => 'http://www.tbeckett.net/articles/plugins/tagger.xhtml',
 	'update_url'  => 'http://thehub.silentworks.co.uk/plugin-version.xml',
-    'require_wolf_version' => '0.5.5')
+    'require_wolf_version' => '0.7.0')
 );
 
 /**
