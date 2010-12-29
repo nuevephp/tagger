@@ -36,7 +36,7 @@ if ($driver == 'mysql') {
 			if (substr(trim($line), -1, 1) == ';')
 			{
 				// Perform the query
-				$PDO->exec(str_replace('{prefix}', TABLE_PREFIX, $sql)) or print('Error performing query \'<strong>' . $sql . '\': ' . mysql_error() . '<br /><br />');
+				$PDO->exec(str_replace('{prefix}', TABLE_PREFIX, $sql)) or die('Error performing query \'<strong>' . $sql . '\': ' . mysql_error() . '<br /><br />');
 				// Reset temp variable to empty
 				$sql = '';
 			}

@@ -97,7 +97,7 @@ class Tags
 	 * @since 1.4.0
 	 * @param string $name
 	 */
-	public function tpl($name)
+	public static function tpl($name)
 	{
 		$sql = 'SELECT content_html FROM '.TABLE_PREFIX.'snippet WHERE name LIKE ?';
 
@@ -115,7 +115,7 @@ class Tags
 	 * @since 1.4.0
 	 * @param string booleon booleon
 	 */
-	public function render($option = array())
+	public static function render($option = array())
 	{
 		// Tag settings from database
 		$tag_setting_type = Plugin::getSetting('tag_type', 'tagger');
