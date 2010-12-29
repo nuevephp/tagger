@@ -27,7 +27,7 @@ class TaggerTag extends PageTag
         return true;
     }
 
-	public function findTagsAndPageAssigned($id)
+	public static function findTagsAndPageAssigned($id)
 	{
 		$pages = NULL;
 		
