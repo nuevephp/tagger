@@ -45,20 +45,20 @@ __Note:__ snippetname will be the name you give your snippet.
    * Count is just a list with the number of items tagged with the tag next to it eg. news(1)
    * Leaving it blank is the same as count without the number eg. news
 
-7. __Page Code__
-Create a new page and add this code below inside it:
+7. __Article Code__
+Create a new article and add this code below inside it:
 
-    <?php
-    $pages = $this->tagger->pagesByTag();
-    if($pages){
-    echo "<h3>Pages tagged with '".$this->tagger->tag()."'</h3>";
-          foreach($pages as $slug => $page)
-    {
-    		echo '<h3><a href="'.$slug.'">'.$page.'</a></h3>';
-    	}
-    } else {
-    	echo "There is no items with this tag.";
-    }
-    ?>
+        <?php
+        $pages = $this->tagger->pagesByTag();
+        if($pages){
+        echo "<h3>Pages tagged with '".$this->tagger->tag()."'</h3>";
+              foreach($pages as $slug => $page)
+        {
+        		echo '<h3><a href="'.$slug.'">'.$page.'</a></h3>';
+        	}
+        } else {
+        	echo "There is no items with this tag.";
+        }
+        ?>
 
 8. Ensure you set this Page Type to Tagger.
