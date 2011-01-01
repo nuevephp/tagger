@@ -1,4 +1,5 @@
 # [Tagger Plugin for Wolf CMS](http://www.tbeckett.net/articles/plugins/tagger.xhtml)
+#### [Alternate Link](http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html)
 
 ## Introduction and Brief History:
 
@@ -22,28 +23,29 @@ After the fork of Wolf CMS from Frog in July 2009, this plugin was first ported 
 
 1. Place this plugin (as a directory named 'tagger' with all contents) in the Wolf /wolf/plugins directory.
 2. Activate the plugin through the administration screen.
-3. The plugin should automatically be ready to use, go to step 4 only if you can't find the Tags page or tag snippet.
+3. The plugin should automatically be ready to use, go to the next steps only if you can't find the Tags page or Tag snippet.
 
-4. _Use Below for Manual Install Only_
-    1. Create a snippet with the information in the snippet.txt file
-    2. Use the code(s) below in a page/snippet/layout to produce the desired effect.
+_Use Below for Manual Install Only_
 
-        <?php $this->includeSnippet('snippetname'); ?>
-    
-    __Note:__ snippetname will be the name you give your snippet.
+4. Create a snippet with the information in the snippet.txt file
+5. Use the code(s) below in a page/snippet/layout to produce the desired effect.
 
-    3. __Snippet Code__
+    <?php $this->includeSnippet('snippetname'); ?>
 
-        <h3>Tag Cloud</h3>
-        <ul id="tagger">
-        <?php tagger('cloud'); ?>
-        </ul>
+__Note:__ snippetname will be the name you give your snippet.
 
-    * Snippet options are cloud, count and you can also leave it empty.
-    * Count is just a list with the number of items tagged with the tag next to it eg. news(1)
-    * Leaving it blank is the same as count without the number eg. news
+6. __Snippet Code__
 
-    4. __Page Code__
+    <h3>Tag Cloud</h3>
+    <ul id="tagger">
+    <?php tagger('cloud'); ?>
+    </ul>
+
+* Snippet options are cloud, count and you can also leave it empty.
+* Count is just a list with the number of items tagged with the tag next to it eg. news(1)
+* Leaving it blank is the same as count without the number eg. news
+
+7. __Page Code__
 Create a new page and add this code below inside it:
 
     <?php
