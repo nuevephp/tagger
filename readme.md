@@ -36,10 +36,10 @@ __Note:__ snippetname will be the name you give your snippet.
 
 6. __Snippet Code__
 
-`<h3>Tag Cloud</h3>
+<pre><h3>Tag Cloud</h3>
 <ul id="tagger">
 <?php tagger('cloud'); ?>
-</ul>`
+</ul></pre>
 
     * Snippet options are cloud, count and you can also leave it empty.
     * Count is just a list with the number of items tagged with the tag next to it eg. news(1)
