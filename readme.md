@@ -36,14 +36,14 @@ __Note:__ snippetname will be the name you give your snippet.
 
 6. __Snippet Code__
 
-`<h3>Tag Cloud</h3>`
-`<ul id="tagger">`
-`<?php tagger('cloud'); ?>`
-`</ul>`
+    <h3>Tag Cloud</h3>
+    <ul id="tagger">
+    <?php tagger('cloud'); ?>
+    </ul>
 
-    * Snippet options are cloud, count and you can also leave it empty.
-    * Count is just a list with the number of items tagged with the tag next to it eg. news(1)
-    * Leaving it blank is the same as count without the number eg. news
+   * Snippet options are cloud, count and you can also leave it empty.
+   * Count is just a list with the number of items tagged with the tag next to it eg. news(1)
+   * Leaving it blank is the same as count without the number eg. news
 
 7. __Page Code__
 Create a new page and add this code below inside it:
