@@ -1,6 +1,10 @@
 # [Tagger Plugin for Wolf CMS](http://www.tbeckett.net/articles/plugins/tagger.xhtml)
 #### [Alternate Link](http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html)
 
+## License
+
+This plugin is dually licensed under the MIT and GPL license models.  For more information view the license_overview.txt file in the license folder.
+
 ## Introduction and Brief History:
 
 The tags idea was brought to light back in February of 2008, before the functionality was even fully implemented within Frog CMS.  The idea was put to the side due to this lack of functionality, but was brought back to centre stage at the end of June, 2008 and blossomed from there.  It was quickly picked up as a great idea by _BDesign_, _easylancer_, and _mvdkleijn_ (in alphabetical order) on the [Frog CMS forum](http://forum.madebyfrog.com/topic/180) and with much discussion between them and help from many others, Tagger was born in its early state at the beginning of July, 2008.
