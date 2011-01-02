@@ -1,6 +1,19 @@
 <?php 
 
 /**
+ * Security measure for Wolf 0.7.0
+ */
+ 
+$ver_check = explode('.',CMS_VERSION);
+if (($ver_check[0] >= 1) || ($ver_check[0] < 1 && $ver_check[1] > 6))
+{
+	if (!defined('IN_CMS')) 
+	{
+		exit();
+	}
+}
+
+/**
  * Tagger Plugin for Wolf CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
  * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>
  * Copyright (C) 2008 - 2010 Andrew Smith <a.smith@silentworks.co.uk>
