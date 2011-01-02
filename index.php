@@ -18,7 +18,7 @@ Plugin::setInfos(array(
     'license'     => 'MIT',
     'author'      => 'Andrew Smith and Tyler Beckett',
     'website'     => 'http://www.tbeckett.net/articles/plugins/tagger.xhtml',
-	'update_url'  => 'http://thehub.silentworks.co.uk/plugin-version.xml',
+	'update_url'  => 'http://www.tbeckett.net/wpv.xhtml',
     'require_wolf_version' => '0.7.0')
 );
 

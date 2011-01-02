@@ -50,10 +50,11 @@
   }
   echo $prev;
   for ($i = 0; $i <= $lastpage; $i++) {
+    $j = $i + 1;
     if ($i == $currentpage)
-      echo '<span class="current">'.$i.'</span>';
+      echo '<span class="current">'.$j.'</span>';
     else
-      echo " <a href=" . get_url('plugin/tagger/index/') . "$i>$i</a>\n";
+      echo " <a href=" . get_url('plugin/tagger/index/') . "$i>$j</a>\n";
   }
   echo $next;
   if ($currentpage != $lastpage) {
