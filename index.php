@@ -172,7 +172,7 @@ class Tags
 							$key_case = ($tag_case == "1") ? ucfirst($key) : strtolower($key);
 							$url = self::tag_url($tagger_page) . slugify($key) . URL_SUFFIX;
 							
-							echo sprintf('<li style="display: inline; border: none;"><a href="%s"  style="display: inline; border: none; font-size: %spx; padding: 2px" title="%s things tagged with %s">%s</a></li>',
+							echo sprintf('<li style="display: inline; border: none;"><a href="%s"  style="display: inline; border: none; font-size: %spx; padding: 2px" title="%s things tagged with %s">%s</a></li>'."\r\n",
 								$url,
 								$size,
 								$value,
