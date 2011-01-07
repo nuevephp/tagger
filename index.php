@@ -18,10 +18,12 @@ define('TAGGER_VERSION', '1.4.0');
 /**
  * Security measure for Wolf 0.7.0+
  */
-if (!defined('CMS_VERSION')) {
-	Flash::set('error', __('Fatal Error: CMS_VERSION not defined, Tagger ' . TAGGER_VERSION . ' is not supported by this version of Wolf CMS'));
+if (!defined('CMS_VERSION'))
+{
+	Flash::set('error', __('Fatal Error: CMS_VERSION not defined.'));
 }
-else {
+else 
+{
 	$ver_check = explode('.',CMS_VERSION);
 	if (($ver_check[0] >= 1) || ($ver_check[0] < 1 && $ver_check[1] > 6))
 	{
@@ -30,6 +32,10 @@ else {
 			Flash::set('error', __('Fatal Error:  Not In CMS'));
 			exit();
 		}
+	}
+	else if ($ver_check[0] < 1 && $ver_check[1] < 7)
+	{
+		Flash::set('error', __('Tagger ' . TAGGER_VERSION . ' is not supported by this version of Wolf CMS.  0.7.0 and higher required.'));
 	}
 }
 
