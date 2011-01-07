@@ -42,13 +42,13 @@ else
 Plugin::setInfos(array(
     'id'          => 'tagger',
     'title'       => 'Tagger',
-    'description' => 'Add tags to any page and organize your website.',
+    'description' => __('Add tags to any page and organize your website.'),
     'version'     => TAGGER_VERSION,
     'license'     => 'MIT',
-    'author'      => 'Andrew Smith and Tyler Beckett',
+    'author'      => 'Andrew Smith ' . __('and') . ' Tyler Beckett',
     'website'     => 'http://www.tbeckett.net/articles/plugins/tagger.xhtml',
 	'update_url'  => 'http://www.tbeckett.net/wpv.xhtml',
-    'require_wolf_version' => '0.7.0')
+    'require_wolf_version' => '0.7.3')
 );
 
 Plugin::addController('tagger', 'Tagger');
