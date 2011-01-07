@@ -3,7 +3,7 @@
 /**
  * Security measure for Wolf 0.7.0+
  */
-if (!defined(CMS_VERSION)) {
+if (!defined('CMS_VERSION')) {
 	Flash::set('error', __('Fatal Error: CMS_VERSION not defined, Tagger ' . TAGGER_VERSION . ' is not supported by this version of Wolf CMS'));
 }
 else {
@@ -29,4 +29,4 @@ else {
  */
 
 Flash::set('success', __('Tagger: Successfully disabled plugin.'));
-	redirect(get_url('setting'));
+redirect(get_url('setting'));

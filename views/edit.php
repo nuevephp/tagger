@@ -1,6 +1,6 @@
 <h1><?php echo __(ucfirst($action).' tag'); ?></h1>
 
-<form action="<?php echo $action=='edit' ? get_url('plugin/tagger/edit/'.$tag->id): get_url('plugin/tagger/add'); ; ?>" method="post">
+<form action="<?php echo $action == 'edit' ? get_url('plugin/tagger/edit/'.$tag->id) : get_url('plugin/tagger/add'); ?>" method="post">
   <div class="form-area">
     <p class="title">
       <label for="tag_name"><?php echo __('Name'); ?></label>
