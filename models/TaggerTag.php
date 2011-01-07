@@ -1,15 +1,20 @@
 <?php
 
 /**
- * Security measure for Wolf 0.7.0
+ * Security measure for Wolf 0.7.0+
  */
- 
-$ver_check = explode('.',CMS_VERSION);
-if (($ver_check[0] >= 1) || ($ver_check[0] < 1 && $ver_check[1] > 6))
-{
-	if (!defined('IN_CMS')) 
+if (CMS_VERSION == '') {
+	Flash::set('error', __('Fatal Error: CMS_VERSION not defined.'));
+}
+else {
+	$ver_check = explode('.',CMS_VERSION);
+	if (($ver_check[0] >= 1) || ($ver_check[0] < 1 && $ver_check[1] > 6))
 	{
-		exit();
+		if (!defined('IN_CMS')) 
+		{
+			Flash::set('error', __('Fatal Error:  Not In CMS'));
+			exit();
+		}
 	}
 }
 

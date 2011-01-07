@@ -28,11 +28,5 @@ else {
  * and GPL (license/gpl-license.txt) licenses.
  */
 
-if (Plugin::deleteAllSettings('tagger') === false) {
-    Flash::set('error', __('Tagger: Unable to remove plugin settings.'));
-    redirect(get_url('setting'));
-}
-else {
-    Flash::set('success', __('Tagger: Successfully removed plugin settings.'));
-    redirect(get_url('setting'));
-}
+Flash::set('success', __('Tagger: Successfully disabled plugin.'));
+	redirect(get_url('setting'));
