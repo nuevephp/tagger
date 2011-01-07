@@ -1,10 +1,25 @@
 <?php
+/**
+ * Tagger Plugin for Wolf CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
+ * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>
+ * Copyright (C) 2008 - 2010 Andrew Smith <a.smith@silentworks.co.uk>
+ * Copyright (C) 2008 - 2010 Tyler Beckett <tyler@tbeckett.net>
+ * 
+ * Dual licensed under the MIT (license/mit-license.txt)
+ * and GPL (license/gpl-license.txt) licenses.
+ */
+
+// Root location where Tagger plugin lives.
+define('TAGGER_ROOT', URI_PUBLIC.'wolf/plugins/tagger');
+
+// Tagger Version
+define('TAGGER_VERSION', '1.4.0');
 
 /**
  * Security measure for Wolf 0.7.0+
  */
-if (CMS_VERSION == '') {
-	Flash::set('error', __('Fatal Error: CMS_VERSION not defined.'));
+if (!defined(CMS_VERSION)) {
+	Flash::set('error', __('Fatal Error: CMS_VERSION not defined, Tagger ' . TAGGER_VERSION . ' is not supported by this version of Wolf CMS'));
 }
 else {
 	$ver_check = explode('.',CMS_VERSION);
@@ -18,32 +33,17 @@ else {
 	}
 }
 
-/**
- * Tagger Plugin for Wolf CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
- * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>
- * Copyright (C) 2008 - 2010 Andrew Smith <a.smith@silentworks.co.uk>
- * Copyright (C) 2008 - 2010 Tyler Beckett <tyler@tbeckett.net>
- * 
- * Dual licensed under the MIT (license/mit-license.txt)
- * and GPL (license/gpl-license.txt) licenses.
- */
-
 Plugin::setInfos(array(
     'id'          => 'tagger',
     'title'       => 'Tagger',
     'description' => 'Add tags to any page and organize your website.',
-    'version'     => '1.4.0',
+    'version'     => TAGGER_VERSION,
     'license'     => 'MIT',
     'author'      => 'Andrew Smith and Tyler Beckett',
     'website'     => 'http://www.tbeckett.net/articles/plugins/tagger.xhtml',
 	'update_url'  => 'http://www.tbeckett.net/wpv.xhtml',
     'require_wolf_version' => '0.7.0')
 );
-
-/**
- * Root location where Tagger plugin lives.
- */
-define('TAGGER_ROOT', URI_PUBLIC.'wolf/plugins/tagger');
 
 Plugin::addController('tagger', 'Tagger');
 Behavior::add('tagger', 'tagger/tagger.php');

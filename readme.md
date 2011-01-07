@@ -31,7 +31,7 @@ After the fork of Wolf CMS from Frog in July 2009, this plugin was first ported 
 
 _Use Below for Manual Install Only_
 
-4. Create a snippet with the information in the snippet.txt file
+4. Create a snippet with the information in the step 6
 5. Use the code(s) below in a page/snippet/layout to produce the desired effect.
 
     <?php $this->includeSnippet('snippetname'); ?>
@@ -42,7 +42,7 @@ __Note:__ snippetname will be the name you give your snippet.
 
         <h3>Tag Cloud</h3>
         <ul id="tagger">
-        <?php tagger('cloud'); ?>
+        <?php Tags::render(array('type' => 'cloud')); ?>
         </ul>
 
    * Snippet options are cloud, count and you can also leave it empty.
@@ -52,17 +52,20 @@ __Note:__ snippetname will be the name you give your snippet.
 7. __Article Code__
 Create a new article and add this code below inside it:
 
-        <?php
-        $pages = $this->tagger->pagesByTag();
-        if($pages){
-        echo "<h3>Pages tagged with '".$this->tagger->tag()."'</h3>";
-              foreach($pages as $slug => $page)
-        {
-        		echo '<h3><a href="'.$slug.'">'.$page.'</a></h3>';
-        	}
-        } else {
-        	echo "There is no items with this tag.";
-        }
-        ?>
+        <?php $pages = $this->tagger->pagesByTag(); ?>
+		<?php if($pages): ?>
+			<h3>You are viewing pages in "<?php echo $this->tagger->tag(); ?>"</h3>
+			<?php foreach ($pages as $page): ?>
+			<div class="entry">
+			  <h3><?php echo $page->link(); ?></h3>
+		<?php echo $page->content(); ?>
+		  <p class="info">Posted by <?php echo $page->author(); ?> on <?php echo $page->date(); ?>  
+		     <br />tags: <?php echo Tags::tag_links($page->tags(), array('delimiter' => ', ')); ?>
+		  </p>
+			</div>
+			<?php endforeach ?>
+		<?php else: ?>
+		<h3>There are no pages tagged with "<?php echo $this->tagger->tag(); ?>"</h3>
+		<?php endif ?>
 
 8. Ensure you set this Page Type to Tagger.

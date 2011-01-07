@@ -3,8 +3,8 @@
 /**
  * Security measure for Wolf 0.7.0+
  */
-if (CMS_VERSION == '') {
-	Flash::set('error', __('Fatal Error: CMS_VERSION not defined.'));
+if (!defined(CMS_VERSION)) {
+	Flash::set('error', __('Fatal Error: CMS_VERSION not defined, Tagger ' . TAGGER_VERSION . ' is not supported by this version of Wolf CMS'));
 }
 else {
 	$ver_check = explode('.',CMS_VERSION);

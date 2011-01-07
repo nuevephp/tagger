@@ -8,7 +8,7 @@
 	<p>You can add Tags to your pages by including this snippet into the page which you want the tags to appear.</p>
 	<code>&lt;?php $this->includeSnippet('<var>tags</var>'); ?&gt;</code>
 	<p><?php echo __('or you can use:'); ?></p>
-	<code>&lt;?php tagger(); ?&gt;</code>
+	<code>&lt;?php Tags::render(); ?&gt;</code>
 	<h2 id="override_tagger" class="subtitle"><?php echo __('Override Tagger Settings'); ?></h2>
 	<p>Tagger is configurable. Set parameters by editing Snippets->tags and changing the following valid parameters.  All of the options below are optional.</p>
 	<ul>
@@ -43,14 +43,14 @@
 	<code>
 		&lt;?php <br/>
 			&nbsp;&nbsp;&nbsp;$params = <samp>array</samp>('type' => 'count', 'case' => true, 'limit' => 5, 'parent' => 4, 'tagger_page' => 10, 'tagger_tpl' => 'tagger_count_tpl');<br/>
-			&nbsp;&nbsp;&nbsp;tagger(<var>$params</var>); <br/>
+			&nbsp;&nbsp;&nbsp;Tags::render(<var>$params</var>); <br/>
 		?&gt;
 	</code>
 	<h2 id="tag_links" class="subtitle"><?php echo __('Tag Links'); ?></h2>
 	<p>If you would like to have the default tags, that appear in the archives just before clicking a page link, show up as links, please edit your archive and change the line that says:</p>
 	<code>&lt;?php echo join(', ', $article->tags()); ?&gt;</code>
 	<p><?php echo __('to be:'); ?></p>
-	<code>&lt;?php echo tag_links($article->tags()); ?&gt;</code>
+	<code>&lt;?php echo Tags::tag_links($article->tags()); ?&gt;</code>
 	<p>The new Tag Links function give you the flexibility to be able to change a second parameter to the delimites you wish, so you could have'</p>
-	<code>&lt;?php echo tag_links($article->tags(), <samp>array</samp>('delimiter' => ' - ', 'tagger_page' => 10)); ?&gt;</code>
+	<code>&lt;?php echo Tags::tag_links($article->tags(), <samp>array</samp>('delimiter' => ' - ', 'tagger_page' => 10)); ?&gt;</code>
 	<p>The second parameter is not required as this will default to a comma and NULL if you choose not to set it.</p>
