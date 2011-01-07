@@ -31,7 +31,7 @@ After the fork of Wolf CMS from Frog in July 2009, this plugin was first ported 
 
 _Use Below for Manual Install Only_
 
-4. Create a snippet with the information in the step 6
+4. Create a snippet with the information in __Snippet Code__
 5. Use the code(s) below in a page/snippet/layout to produce the desired effect.
 
     <?php $this->includeSnippet('snippetname'); ?>
