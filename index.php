@@ -36,6 +36,7 @@ else
 	else if ($ver_check[0] < 1 && $ver_check[1] < 7)
 	{
 		Flash::set('error', __('Tagger ' . TAGGER_VERSION . ' is not supported by this version of Wolf CMS.  0.7.0 and higher required.'));
+		exit();
 	}
 }
 
