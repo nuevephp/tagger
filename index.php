@@ -55,6 +55,9 @@ Plugin::setInfos(array(
 Plugin::addController('tagger', 'Tagger');
 Behavior::add('tagger', 'tagger/tagger.php');
 
+// Setting error display depending on debug mode or not
+error_reporting((DEBUG ? (E_ALL | E_STRICT) : 0));
+
 /**
  * Tagger Tag Cloud, Count and List new Object
  *
