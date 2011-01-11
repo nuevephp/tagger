@@ -14,6 +14,7 @@ define('TAGGER_ROOT', URI_PUBLIC.'wolf/plugins/tagger');
 
 // Tagger Version
 define('TAGGER_VERSION', '1.4.0');
+define('TAGGER_NAME',__('Tagger'));
 
 /**
  * Security measure for Wolf 0.7.0+
@@ -42,7 +43,7 @@ else
 
 Plugin::setInfos(array(
     'id'          => 'tagger',
-    'title'       => 'Tagger',
+    'title'       => TAGGER_NAME,
     'description' => __('Add tags to any page and organize your website.'),
     'version'     => TAGGER_VERSION,
     'license'     => 'MIT',
@@ -52,7 +53,7 @@ Plugin::setInfos(array(
     'require_wolf_version' => '0.7.3')
 );
 
-Plugin::addController('tagger', 'Tagger');
+Plugin::addController('tagger', TAGGER_NAME);
 Behavior::add('tagger', 'tagger/tagger.php');
 
 // Setting error display depending on debug mode or not
