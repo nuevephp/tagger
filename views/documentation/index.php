@@ -1,16 +1,16 @@
-	<h3>Table of Contents</h3>
+	<h3><?php echo __('Table of Contents'); ?></h3>
 	<ul>
 		<li><a href="#how_to"><?php echo __('How to use Tagger?'); ?></a></li>
 		<li><a href="#override_tagger"><?php echo __('Override Tagger Settings'); ?></a></li>
 		<li><a href="#tag_links"><?php echo __('Tag Links'); ?></a></li>
 	</ul>
 	<h2 id="how_to" class="subtitle"><?php echo __('How to use Tagger?'); ?></h2>
-	<p>You can add Tags to your pages by including this snippet into the page which you want the tags to appear.</p>
+	<p><?php echo __('You can add Tags to your pages by including this snippet into the page which you want the tags to appear.'); ?></p>
 	<code>&lt;?php $this->includeSnippet('<var>tags</var>'); ?&gt;</code>
 	<p><?php echo __('or you can use:'); ?></p>
 	<code>&lt;?php Tags::render(); ?&gt;</code>
 	<h2 id="override_tagger" class="subtitle"><?php echo __('Override Tagger Settings'); ?></h2>
-	<p>Tagger is configurable. Set parameters by editing Snippets->tags and changing the following valid parameters.  All of the options below are optional.</p>
+	<p><?php echo __('Tagger is configurable. Set parameters by editing Snippets->tags and changing the following valid parameters.  All of the options below are optional.'); ?></p>
 	<ul>
 		<li>
 			<strong>Tag Type: </strong>Set this to cloud, count or just leave it blank.
@@ -47,10 +47,10 @@
 		?&gt;
 	</code>
 	<h2 id="tag_links" class="subtitle"><?php echo __('Tag Links'); ?></h2>
-	<p>If you would like to have the default tags, that appear in the archives just before clicking a page link, show up as links, please edit your archive and change the line that says:</p>
+	<p><?php echo __('If you would like to have the default tags, that appear in the archives just before clicking a page link, show up as links, please edit your archive and change the line that says:'); ?></p>
 	<code>&lt;?php echo join(', ', $article->tags()); ?&gt;</code>
 	<p><?php echo __('to be:'); ?></p>
 	<code>&lt;?php echo Tags::tag_links($article->tags()); ?&gt;</code>
-	<p>The new Tag Links function give you the flexibility to be able to change a second parameter to the delimites you wish, so you could have'</p>
+	<p><?php echo __('The new Tag Links function give you the flexibility to be able to change a second parameter to the delimites you wish, so you could have'); ?></p>
 	<code>&lt;?php echo Tags::tag_links($article->tags(), <samp>array</samp>('delimiter' => ' - ', 'tagger_page' => 10)); ?&gt;</code>
-	<p>The second parameter is not required as this will default to a comma and NULL if you choose not to set it.</p>
+	<p><?php echo __('The second parameter is not required as this will default to a comma and NULL if you choose not to set it.'); ?></p>

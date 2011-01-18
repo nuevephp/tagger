@@ -10,7 +10,8 @@
  */
 
 // Root location where Tagger plugin lives.
-define('TAGGER_ROOT', URI_PUBLIC.'wolf/plugins/tagger');
+define('TAGGER_URL', URI_PUBLIC.'wolf/plugins/tagger');
+define('TAGGER_ROOT', dirname(__FILE__) .'/');
 
 // Tagger Version
 define('TAGGER_VERSION', '1.4.0');
@@ -19,27 +20,7 @@ define('TAGGER_NAME',__('Tagger'));
 /**
  * Security measure for Wolf 0.7.0+
  */
-if (!defined('CMS_VERSION'))
-{
-	Flash::set('error', __('Fatal Error: CMS_VERSION not defined.'));
-}
-else 
-{
-	$ver_check = explode('.',CMS_VERSION);
-	if (($ver_check[0] >= 1) || ($ver_check[0] < 1 && $ver_check[1] > 6))
-	{
-		if (!defined('IN_CMS')) 
-		{
-			Flash::set('error', __('Fatal Error:  Not In CMS'));
-			exit();
-		}
-	}
-	else if ($ver_check[0] < 1 && $ver_check[1] < 7)
-	{
-		Flash::set('error', __('Tagger ' . TAGGER_VERSION . ' is not supported by this version of Wolf CMS.  0.7.0 and higher required.'));
-		exit();
-	}
-}
+include_once TAGGER_ROOT . "security.php";
 
 Plugin::setInfos(array(
     'id'          => 'tagger',
