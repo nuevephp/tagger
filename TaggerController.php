@@ -1,19 +1,18 @@
 <?php
+/**
+ * Tagger Plugin for Wolf CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
+ * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>
+ * Copyright (C) 2008 - 2011 Andrew Smith <a.smith@silentworks.co.uk>
+ * Copyright (C) 2008 - 2011 Tyler Beckett <tyler@tbeckett.net>
+ * 
+ * Dual licensed under the MIT (license/mit-license.txt)
+ * and GPL (license/gpl-license.txt) licenses.
+ */
 
 /**
  * Security measure for Wolf 0.7.0+
  */
 include_once TAGGER_ROOT . "security.php";
-
-/**
- * Tagger Plugin for Wolf CMS <http://thehub.silentworks.co.uk/plugins/frog-cms/tagger.html>
- * Alternate Mirror site <http://www.tbeckett.net/articles/plugins/tagger.xhtml>
- * Copyright (C) 2008 - 2010 Andrew Smith <a.smith@silentworks.co.uk>
- * Copyright (C) 2008 - 2010 Tyler Beckett <tyler@tbeckett.net>
- * 
- * Dual licensed under the MIT (license/mit-license.txt)
- * and GPL (license/gpl-license.txt) licenses.
- */
 
 /**
  * The Tagger plugin provides an interface to add, edit and delete tags.
@@ -25,7 +24,7 @@ include_once TAGGER_ROOT . "security.php";
  * @author Tyler Beckett <tyler@tbeckett.net>
  * @version 1.1.0
  * @since Frog version 0.9.3
- * @copyright Andrew Smith, Tyler Beckett, 2008 - 2010
+ * @copyright Andrew Smith, Tyler Beckett, 2008 - 2011
  */
 
 // Include Tagger Models
@@ -87,7 +86,7 @@ class TaggerController extends PluginController
         ));
     }
 
-    public function _add()
+    private function _add()
     {
         $data = $_POST['tag'];
         Flash::set('post_data', (object) $data);
@@ -106,7 +105,7 @@ class TaggerController extends PluginController
         else redirect(get_url('plugin/tagger/edit/'.$tag->id));
     }
 
-    function edit($id)
+    public function edit($id)
     {
         if ( ! $tag = Tagger::findById($id))
         {
@@ -123,7 +122,7 @@ class TaggerController extends PluginController
         ));
     }
 
-    function _edit($id)
+    private function _edit($id)
     {
         $data = $_POST['tag'];
 
@@ -143,7 +142,7 @@ class TaggerController extends PluginController
         else redirect(get_url('plugin/tagger/edit/'.$id));
     }
 
-    function delete($id) {
+    public function delete($id) {
         // find the user to delete
         if ($tag = Record::findByIdFrom('Tag', $id))
         {
@@ -157,7 +156,7 @@ class TaggerController extends PluginController
         redirect(get_url('plugin/tagger'));
     }
 
-	function save() {
+	private function save() {
 		$tag_type = mysql_escape_string($_POST['tag_type']);
         $case = mysql_escape_string($_POST['case']);
         $rowspage = mysql_escape_string($_POST['rowspage']);
@@ -186,7 +185,7 @@ class TaggerController extends PluginController
 	 *
 	 * @param string $ids
 	 */
-    function endrelationship($ids) {
+    public function endrelationship($ids) {
     	$id = explode('-', $ids);
 
     	$page_id = $id[0];
@@ -212,7 +211,7 @@ class TaggerController extends PluginController
 	 * @since 1.1.0
 	 *
 	 */
-	function settings() {
+	public function settings() {
         $tmp = Plugin::getAllSettings('tagger');
         $settings = array('tag_type' => $tmp['tag_type'],
                           'case' => $tmp['case'],
@@ -229,11 +228,11 @@ class TaggerController extends PluginController
 	 * @since 1.2.4
 	 *
 	 */
-	function purge() {
+	public function purge() {
 		$this->display('tagger/views/purge');
     }
 
-	function purged() {
+	public function purged() {
 		Tagger::purge_old();
 		redirect(get_url('plugin/tagger'));
     }
