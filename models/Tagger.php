@@ -71,12 +71,13 @@ class Tagger extends Tag
         ));
     }
 
+
 	/*
 	 * Purges old Tags from the database and reconstructs the number of tags
 	 *
 	 * @since 1.2.4
 	 */
-	public function purge_old ()
+	public static function purge_old ()
 	{
 		$sql = 'SELECT * FROM '.TABLE_PREFIX.'page_tag ORDER BY tag_id ASC';
 		$pdo = Record::getConnection();
@@ -109,6 +110,36 @@ class Tagger extends Tag
 			$current2[$id] = 0;
 		}
 
+		/*
+		 * Backwards compatibility function for PHP versions prior to 5.3.0
+		 *
+		 * @since 1.4.0
+		 */
+		if (!function_exists('array_replace'))
+		{
+		  function array_replace( array &$array, array &$array1 )
+		  {
+			$args = func_get_args();
+			$count = func_num_args();
+
+			for ($i = 0; $i < $count; ++$i) {
+			  if (is_array($args[$i])) {
+				foreach ($args[$i] as $key => $val) {
+				  $array[$key] = $val;
+				}
+			  }
+			  else {
+				trigger_error(
+				  __FUNCTION__ . '(): Argument #' . ($i+1) . ' is not an array',
+				  E_USER_WARNING
+				);
+				return NULL;
+			  }
+			}
+
+			return $array;
+		  }
+		}
 		$new = array_replace($current2, $count);
 
 		// Update actual count of Tag table with actual count from page_tag table.

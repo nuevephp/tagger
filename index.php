@@ -14,7 +14,7 @@ define('TAGGER_URL', URI_PUBLIC.'wolf/plugins/tagger');
 define('TAGGER_ROOT', dirname(__FILE__) .'/');
 
 // Tagger Version
-define('TAGGER_VERSION', '1.4.0');
+define('TAGGER_VERSION', '1.4.1');
 define('TAGGER_NAME',__('Tagger'));
 
 /**
@@ -159,8 +159,8 @@ class Tags
 
 			switch($tag_type) {
 				case "cloud":
-					$max_size = 32; // max font size in pixels
-					$min_size = 12; // min font size in pixels
+					$max_size = 28; // max font size in pixels
+					$min_size = 10; // min font size in pixels
 
 					// largest and smallest array values
 					$max_qty = max(array_values($tags));
