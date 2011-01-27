@@ -156,24 +156,28 @@ class TaggerController extends PluginController
         redirect(get_url('plugin/tagger'));
     }
 
-	private function save() {
-		$tag_type = mysql_escape_string($_POST['tag_type']);
-        $case = mysql_escape_string($_POST['case']);
-        $rowspage = mysql_escape_string($_POST['rowspage']);
-        $sort_field = mysql_escape_string($_POST['sort_field']);
-        $sort_order = mysql_escape_string($_POST['sort_order']);
+	public function save() {
+		$db_dsn = explode(';', DB_DSN);
+		$db_host = str_replace('host=','',$db_dsn[1]);
+		
+		if (mysql_connect($db_host, DB_USER, DB_PASS)) {
+			$tag_type = mysql_real_escape_string($_POST['tag_type']);
+			$case = mysql_real_escape_string($_POST['case']);
+			$rowspage = mysql_real_escape_string($_POST['rowspage']);
+			$sort_field = mysql_real_escape_string($_POST['sort_field']);
+			$sort_order = mysql_real_escape_string($_POST['sort_order']);
 
-        $settings = array('tag_type' => $tag_type,
-                          'case' => $case,
-                          'rowspage' => $rowspage,
-                          'sort_field' => $sort_field,
-                          'sort_order' => $sort_order
-                         );
+			$settings = array('tag_type' => $tag_type,
+							  'case' => $case,
+							  'rowspage' => $rowspage,
+							  'sort_field' => $sort_field,
+							  'sort_order' => $sort_order
+							 );
 
-        $ret = Plugin::setAllSettings($settings, 'tagger');
-
+			$ret = Plugin::setAllSettings($settings, 'tagger');
+		}
         if ($ret) Flash::set('success', __('The settings have been updated.'));
-        else Flash::set('error', 'An error has occured.');
+        else Flash::set('error', __('An error has occured.'));
 
         redirect(get_url('plugin/tagger/settings'));
 	}
