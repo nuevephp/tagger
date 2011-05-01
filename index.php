@@ -14,7 +14,7 @@ define('TAGGER_URL', URI_PUBLIC.'wolf/plugins/tagger');
 define('TAGGER_ROOT', dirname(__FILE__) .'/');
 
 // Tagger Version
-define('TAGGER_VERSION', '1.4.2');
+define('TAGGER_VERSION', '1.4.3');
 define('TAGGER_NAME',__('Tagger'));
 
 /**
