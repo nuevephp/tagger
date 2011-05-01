@@ -69,7 +69,7 @@ class Tagger
 				$page = new PageTagger($object, $this);
 				
 				// assignParts
-                $page->part = get_parts($page->id);
+                $page->part = Page::get_parts($page->id);
                 $pages[] = $page;
 			}
 		} else return false;
