@@ -10,11 +10,6 @@
  */
 
 /**
- * Security measure for Wolf 0.7.0+
- */
-include_once TAGGER_ROOT . "security.php";
-
-/**
  * class TaggerTag
  *
  * @author Andrew Smith <a.smith@silentworks.co.uk>

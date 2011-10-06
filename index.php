@@ -14,13 +14,8 @@ define('TAGGER_URL', URI_PUBLIC.'wolf/plugins/tagger');
 define('TAGGER_ROOT', dirname(__FILE__) .'/');
 
 // Tagger Version
-define('TAGGER_VERSION', '1.4.3');
+define('TAGGER_VERSION', '1.4.4');
 define('TAGGER_NAME',__('Tagger'));
-
-/**
- * Security measure for Wolf 0.7.0+
- */
-include_once TAGGER_ROOT . "security.php";
 
 Plugin::setInfos(array(
     'id'          => 'tagger',
