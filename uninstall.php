@@ -10,7 +10,7 @@
  */
 
 /**
- * Security measure for Wolf 0.7.0+
+ * Tagger Utils
  */
 $tagger_dir = dirname(__FILE__) . '/';
 include_once $tagger_dir . "utils.php";
@@ -32,14 +32,14 @@ if ($driver == 'mysql')
 				'{page_id}' => $page['id']
 			)
 		);
-
-		/*if (Plugin::deleteAllSettings('tagger') === false) {
-		    Flash::set('error', __('Tagger: Unable to remove plugin settings.'));
-		    redirect(get_url('setting'));
-		}
-		else {
-		    Flash::set('success', __('Tagger: Successfully removed plugin settings.'));
-		    redirect(get_url('setting'));
-		}*/
 	}
+}
+
+if (Plugin::deleteAllSettings('tagger') === false) {
+    Flash::set('error', __('Tagger: Unable to remove plugin settings.'));
+    redirect(get_url('setting'));
+}
+else {
+    Flash::set('success', __('Tagger: Successfully removed plugin settings.'));
+    redirect(get_url('setting'));
 }
