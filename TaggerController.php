@@ -10,11 +10,6 @@
  */
 
 /**
- * Security measure for Wolf 0.7.0+
- */
-include_once TAGGER_ROOT . "security.php";
-
-/**
  * The Tagger plugin provides an interface to add, edit and delete tags.
  *
  * @package wolf
