@@ -12,13 +12,27 @@
 /**
  * Security measure for Wolf 0.7.0+
  */
-include_once TAGGER_ROOT . "security.php";
+$PDO = Record::getConnection();
+$driver = strtolower($PDO->getAttribute(Record::ATTR_DRIVER_NAME));
+if ($driver == 'mysql')
+{
+	$query = $PDO->query("SELECT * FROM ".TABLE_PREFIX."page WHERE behavior_id = 'tagger'");
+	
+	if($query->rowCount())
+	{
+		$page = $query->fetch(PDO::FETCH_ASSOC);
+		var_dump($page); die;
 
-if (Plugin::deleteAllSettings('tagger') === false) {
-    Flash::set('error', __('Tagger: Unable to remove plugin settings.'));
-    redirect(get_url('setting'));
-}
-else {
-    Flash::set('success', __('Tagger: Successfully removed plugin settings.'));
-    redirect(get_url('setting'));
+		$PDO->exec("DROP FROM ".TABLE_PREFIX."page WHERE page_id = " . $page['id']);
+		$PDO->exec("DROP FROM ".TABLE_PREFIX."page WHERE behavior_id = 'tagger'");
+
+		if (Plugin::deleteAllSettings('tagger') === false) {
+		    Flash::set('error', __('Tagger: Unable to remove plugin settings.'));
+		    redirect(get_url('setting'));
+		}
+		else {
+		    Flash::set('success', __('Tagger: Successfully removed plugin settings.'));
+		    redirect(get_url('setting'));
+		}
+	}
 }
