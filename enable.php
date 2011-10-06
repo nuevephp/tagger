@@ -12,7 +12,8 @@
 /**
  * Tagger Utils
  */
-include_once TAGGER_ROOT . "utils.php";
+$tagger_dir = dirname(__FILE__) . '/';
+include_once $tagger_dir . "utils.php";
 
 $PDO = Record::getConnection();
 $driver = strtolower($PDO->getAttribute(Record::ATTR_DRIVER_NAME));
@@ -20,10 +21,14 @@ $driver = strtolower($PDO->getAttribute(Record::ATTR_DRIVER_NAME));
 if ($driver == 'mysql') {
 	
 	$query = $PDO->query("SELECT * FROM ".TABLE_PREFIX."page WHERE behavior_id = 'tagger'");
-
 	if(!$query->rowCount()){
 		// Create Pages
-		executioner(file(dirname(__file__) . '/sql/install.sql'), TABLE_PREFIX);
+		executioner(
+			file($tagger_dir . 'sql/install.sql'),
+			array(
+				'{prefix}' => TABLE_PREFIX
+			)
+		);
 	}
 }
 

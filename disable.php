@@ -9,10 +9,5 @@
  * and GPL (license/gpl-license.txt) licenses.
  */
 
-/**
- * Security measure for Wolf 0.7.0+
- */
-include_once TAGGER_ROOT . "security.php";
-
 Flash::set('success', __('Tagger: Successfully disabled plugin.'));
 redirect(get_url('setting'));

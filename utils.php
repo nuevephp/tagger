@@ -3,8 +3,10 @@
  * Tagger Utilities
  */
 
-function executioner($file_path, $table_prefix)
+function executioner($file_path, $params = array())
 {
+	$PDO = Record::getConnection();
+
 	// Temporary variable, used to store current query
 	$sql = '';
 
@@ -24,11 +26,11 @@ function executioner($file_path, $table_prefix)
 		if (substr(trim($line), -1, 1) == ';')
 		{
 			// Perform the query
-			if ($table_prefix)
+			if (!empty($params))
 			{
-				$sql = str_replace('{prefix}', TABLE_PREFIX, $sql);
+				$sql = str_replace(array_keys($params), $params, $sql);
 			}
-
+			
 			$PDO->exec($sql) or die('Error performing query \'<strong>' . $sql . '\': ' . mysql_error() . '<br /><br />');
 			// Reset temp variable to empty
 			$sql = '';
