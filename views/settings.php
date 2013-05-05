@@ -23,7 +23,7 @@
 						<option value="default" <?php if($tag_type == "default") echo 'selected ="";' ?>><?php echo __('List'); ?></option>
 					</select>
 				</td>
-                <td class="help"><?php echo __("Select how you would like the tags to be displayed, you can also overide this within the tag snippet."); ?></td>
+                <td class="help"><?php echo __('Select how you would like the tags to be displayed, you can also overide this within the tag snippet.'); ?></td>
             </tr>
         </table>
     </fieldset>
@@ -56,7 +56,7 @@
 						<option value="DESC" <?php if($sort_order == "DESC") echo 'selected ="";' ?>><?php echo __('DESC'); ?></option>
 					</select>
 				</td>
-	            <td class="help"><?php echo __("Choose the order your would like your tags to be sorted by in the backend."); ?></td>
+	            <td class="help"><?php echo __('Choose the order your would like your tags to be sorted by in the backend.'); ?></td>
 	        </tr>
 	    </table>
     </fieldset>

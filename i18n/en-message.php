@@ -55,6 +55,7 @@ return array(
 	'Count' => 'Count', 
 	'Cloud' => 'Cloud', 
 	'List' => 'List', 
+    'Select how you would like the tags to be displayed, you can also overide this within the tag snippet.' => 'Select how you would like the tags to be displayed, you can also overide this within the tag snippet.', 
 	'Tagger Backend settings' => 'Tagger Backend settings', 
 	'Tags per page' => 'Tags per page', 
 	'Sets the number of tags to be displayed per page in the backend.' => 'Sets the number of tags to be displayed per page in the backend.', 
@@ -63,6 +64,7 @@ return array(
 	'Sort Order' => 'Sort Order', 
 	'ASC' => 'ASC', 
 	'DESC' => 'DESC', 
+	'Choose the order your would like your tags to be sorted by in the backend.' => 'Choose the order your would like your tags to be sorted by in the backend.', 
 	/** views/sidebar.php */ 
 	'New Tag' => 'New Tag', 
 	'Settings' => 'Settings', 
