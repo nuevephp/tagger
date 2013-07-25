@@ -84,7 +84,7 @@ class Tags
 		
 		$i = 1;
 		foreach($tags as $tag){
-			$url = self::tag_url($tagger_page) . $tag . URL_SUFFIX;
+			$url = self::tag_url($tagger_page) . slugify($tag) . URL_SUFFIX;
 			$end = $i == count($tags) ? '.' : $delimiter;
 			
 			echo sprintf('<a href="%s">%s</a>%s', 
