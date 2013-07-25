@@ -244,8 +244,8 @@ function cmpVals($val1, $val2)
  * @param string $string
  */
 function slugify($string){
-	$search = array(' ','å','ä','á','à','â','ã','ª','Á','À','Â','Ã','é','ë','è','ê','Ë','É','È','Ê','ï','í','ì','î','Í','Ì','Î','ø','ö','ò','ó','ô','õ','º','Ó','Ò','Ô','Õ','ü','ú','ù','û','Ú','Ù','Û','ç','Ç','Ñ','ñ');
-	$replace = array('-','a','a','a','a','a','a','a','A','A','A','A','e','e','e','e','E','E','E','E','i','i','i','i','I','I','I','o','o','o','o','o','o','o','O','O','O','O','u','u','u','u','U','U','U','c','C','N','n');
+	$search = array(' ','å','ä','á','à','â','ã','ª','Á','À','Â','Ã','é','ë','è','ê','ě','Ë','É','È','Ê','Ě','ï','í','ì','î','Í','Ì','Î','ø','ö','ò','ó','ô','õ','º','Ó','Ò','Ô','Õ','ü','ú','ù','û','ů','Ú','Ù','Û','Ů','ç','Ç','Ñ','ñ','š','Š','č','Č','ř','Ř','ž','Ž','ý','Ý','ď','Ď','ť','Ť','ň','Ň');
+	$replace = array('-','a','a','a','a','a','a','a','A','A','A','A','e','e','e','e','e','E','E','E','E','E','i','i','i','i','I','I','I','o','o','o','o','o','o','o','O','O','O','O','u','u','u','u','u','U','U','U','U','c','C','N','n','s','S','c','C','r','R','z','Z','y','Y','d','D','t','T','n','N');
     $slug = trim(str_replace($search, $replace, $string)); // substitute the spaces with hyphens
     $slug = strtolower($slug); // lower-case the string
 	return preg_replace('[^A-Za-z0-9\_\.\-]', '', $slug); // remove all non-alphanumeric characters except for spaces and hyphens
