@@ -34,6 +34,29 @@ class Tagger
         return $params[0];
     }
 
+	/**
+	 * Retrieve the original tag name
+	 */
+    public function tagName($params = false)
+    {
+        if (!$params) $params = $this->params;
+
+        // Prepare the query parameters
+        $tag = $params[0];
+        $tag_unslugified = unslugify($params[0]);
+
+        $sql = "SELECT name FROM " . TABLE_PREFIX . "tag AS tag WHERE tag.name = '$tag' OR tag.name = '$tag_unslugified'";
+
+        // Retrieve the original tag name
+        $stmt = Record::getConnection()->prepare($sql);
+        $stmt->execute();
+
+        if ($obj = $stmt->fetchObject())
+            $tag = $obj->name;
+
+        return $tag;
+    }
+
     public function pagesByTag($params = false)
 	{
 		$pdoConn = Record::getConnection();
