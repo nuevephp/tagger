@@ -61,7 +61,7 @@ class Tagger
 			$stmt->execute();
 			
 			while ($object = $stmt->fetchObject()) {
-				$page = new PageTagger($object, $this);
+				$page = new PageTagger($object);
 				
 				// assignParts
                 $page->part = Page::get_parts($page->id);
