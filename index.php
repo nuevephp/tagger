@@ -130,15 +130,16 @@ class Tags
 		$tag_type = array_key_exists('type', $option) ? $option['type'] : $tag_setting_type;
 		$tag_case = array_key_exists('case', $option) ? $option['case'] : $tag_setting_case;
 		
-		// Setting Limit, Parent and Tagger page if selected
+		// Setting Sort order, Limit, Parent and Tagger page if selected
 		$limit_set = array_key_exists('limit', $option) ? " LIMIT 0, {$option['limit']}" : NULL;
 		$parent = array_key_exists('parent', $option) ? " AND page.parent_id = {$option['parent']}" : NULL;
 		$tagger_page = array_key_exists('tagger_page', $option) ? $option['tagger_page'] : NULL;
 		$tpl = array_key_exists('tagger_tpl', $option) ? $option['tagger_tpl'] : NULL;
+		$order_by = array_key_exists('order_by', $option) && $option['order_by'] == 'count' ? ' ORDER BY count DESC' : NULL;
 
 	    $sql = 'SELECT name, count FROM '.TABLE_PREFIX.'tag AS tag, '.TABLE_PREFIX.'page AS page, '.TABLE_PREFIX.'page_tag AS page_tag'
 			   .' WHERE tag.id = page_tag.tag_id AND page_tag.page_id = page.id AND page.status_id != '.Page::STATUS_HIDDEN.' AND'
-			   .' page.status_id != '.Page::STATUS_DRAFT . $parent . $limit_set;
+			   .' page.status_id != '.Page::STATUS_DRAFT . $parent . ' GROUP BY tag.id' . $order_by . $limit_set;
 
 	    $stmt = Record::getConnection()->prepare($sql);
 	    $stmt->execute();
